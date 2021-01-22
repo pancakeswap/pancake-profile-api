@@ -17,7 +17,8 @@
     }
   },
   "dependencies": {
-    "ethereumjs-util": "^7.0.7"
+    "ethereumjs-util": "^7.0.7",
+    "mongoose": "^5.11.13"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
