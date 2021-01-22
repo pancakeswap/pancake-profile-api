@@ -1,24 +1,26 @@
-import mongoose, { Mongoose } from "mongoose";
+import mongoose, { Connection } from "mongoose";
+import { userSchema } from "./schemas";
 
-let cachedDb: Mongoose | null = null;
+let connection: Connection | null = null;
 
 /**
  * @see https://vercel.com/guides/deploying-a-mongodb-powered-api-with-node-and-vercel
+ * @see https://mongoosejs.com/docs/lambda.html
  */
-export const connectToDatabase = async (): Promise<Mongoose> => {
-  if (cachedDb) {
-    return cachedDb;
+export const getConnection = async (): Promise<Connection> => {
+  if (connection == null) {
+    const uri = process.env.MONGO_URI ?? "mongodb://localhost:27017/profile";
+    connection = await mongoose.createConnection(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+      bufferCommands: false,
+      bufferMaxEntries: 0,
+    });
+
+    await connection;
+    connection.model("User", userSchema);
   }
 
-  const uri = process.env.MONGO_URI ?? "mongodb://localhost:27017/";
-  const client = await mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-    dbName: process.env.MONGO_DATABASE,
-  });
-
-  cachedDb = client;
-  return client;
+  return connection;
 };
