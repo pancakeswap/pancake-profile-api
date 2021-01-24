@@ -26,8 +26,8 @@ export const getConnection = async (): Promise<Connection> => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getUserModel = async (): Promise<Model<any>> => {
+export const getModel = async (name: string): Promise<Model<any>> => {
   connection = await getConnection();
 
-  return connection.model("User");
+  return connection.model(name);
 };
