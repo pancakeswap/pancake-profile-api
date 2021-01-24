@@ -1,5 +1,6 @@
 import { hashPersonalMessage, fromRpcSig, ecrecover, publicToAddress, bufferToHex } from "ethereumjs-util";
 import blacklist from "../utils/blacklist.json";
+import { getModel } from "./mongo";
 
 /**
  * Recover the msg.sender for a given signature based on a message.
@@ -8,7 +9,7 @@ import blacklist from "../utils/blacklist.json";
  *
  * @param {string} message
  * @param {string} signature
- * @returns {string}
+ * @returns string
  */
 export const verifyMessage = (message: string, signature: string): string => {
   // Returns the keccak-256 hash of `message`, prefixed with the header used by the `eth_sign` RPC call.
@@ -33,26 +34,52 @@ export const verifyMessage = (message: string, signature: string): string => {
  * @see https://github.com/pancakeswap/pancake-profile/blob/master/user-stories.md#step-4-username-creation
  *
  * @param {string} username
- * @returns {boolean}
+ * @returns {boolean, string}
  */
-export const isValid = (username: string): boolean => {
-  // Check username length (between 3 and 15 characters)
-  if (username.length < 3 || username.length > 15) {
-    return false;
+export const isValid = async (username: string): Promise<{ valid: boolean; message?: string }> => {
+  // Cannot use a username of less than 3 characters
+  if (username.length < 3) {
+    return {
+      valid: false,
+      message: "Minimum length: 3 characters",
+    };
   }
 
-  // Check for non-alphanumeric characters.
+  // Cannot use a username of more than 15 characters
+  if (username.length > 15) {
+    return {
+      valid: false,
+      message: "Maximum length: 15 characters",
+    };
+  }
+
+  // Can only use alphanumeric characters
+  // Cannot use a space in their username
   if (!username.match(/^[a-zA-Z0-9]+$/i)) {
-    return false;
+    return {
+      valid: false,
+      message: "No spaces or special characters",
+    };
   }
 
-  // TODO:  Cannot have the same username as another user (Case insensitive).
-  // Require Web3 with a contract call.
+  // Cannot have the same username as another user (Case insensitive)
+  const userModel = await getModel("User");
+  if (await userModel.exists({ username })) {
+    return {
+      valid: false,
+      message: "Username taken",
+    };
+  }
 
-  // Check for username not in blacklist.
+  // Cannot create a username which violates blacklist
   if (username.toLowerCase().match(blacklist.join("|"))) {
-    return false;
+    return {
+      valid: false,
+      message: "Username not allowed",
+    };
   }
 
-  return true;
+  return {
+    valid: true,
+  };
 };
