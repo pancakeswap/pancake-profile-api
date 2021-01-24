@@ -1,13 +1,17 @@
 import { NowRequest, NowResponse } from "@vercel/node";
 import { verifyMessage } from "../utils";
+import { getModel } from "../utils/mongo";
 
 export default async (req: NowRequest, res: NowResponse): Promise<NowResponse> => {
   const { address, message, signature } = req.body;
 
   const signedAddress = verifyMessage(message, signature);
   if (address !== signedAddress) {
-    return res.status(400).json({ error: { code: 1110, message: "Invalid signature." } });
+    return res.status(400).json({ error: { message: "Invalid signature." } });
   }
 
-  return res.status(200).json({ address, message });
+  const userModel = await getModel("User");
+  const user = await new userModel({ address, username: message, created_at: Date.now() }).save();
+
+  return res.status(200).json(user);
 };
