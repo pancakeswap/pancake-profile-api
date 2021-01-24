@@ -1,4 +1,5 @@
 import { hashPersonalMessage, fromRpcSig, ecrecover, publicToAddress, bufferToHex } from "ethereumjs-util";
+import blacklist from "../utils/blacklist.json";
 
 /**
  * Recover the msg.sender for a given signature based on a message.
@@ -24,4 +25,34 @@ export const verifyMessage = (message: string, signature: string): string => {
   const address = bufferToHex(publicToAddress(publicKey, true));
 
   return address;
+};
+
+/**
+ * Check for the validity of a username based on rules (see documentation).
+ *
+ * @see https://github.com/pancakeswap/pancake-profile/blob/master/user-stories.md#step-4-username-creation
+ *
+ * @param {string} username
+ * @returns {boolean}
+ */
+export const isValid = (username: string): boolean => {
+  // Check username length (between 3 and 15 characters)
+  if (username.length < 3 || username.length > 15) {
+    return false;
+  }
+
+  // Check for non-alphanumeric characters.
+  if (!username.match(/^[a-zA-Z0-9]+$/i)) {
+    return false;
+  }
+
+  // TODO:  Cannot have the same username as another user (Case insensitive).
+  // Require Web3 with a contract call.
+
+  // Check for username not in blacklist.
+  if (username.toLowerCase().match(blacklist.join("|"))) {
+    return false;
+  }
+
+  return true;
 };
