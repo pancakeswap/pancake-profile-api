@@ -22,6 +22,7 @@ export const userSchema: Schema = new Schema(
     },
     updated_at: {
       type: Date,
+      default: null,
     },
   },
   {
