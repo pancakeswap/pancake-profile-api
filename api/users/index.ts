@@ -1,5 +1,5 @@
 import { NowRequest, NowResponse } from "@vercel/node";
-import { getModel } from "../utils/mongo";
+import { getModel } from "../../utils/mongo";
 
 export default async (req: NowRequest, res: NowResponse): Promise<NowResponse> => {
   const { address } = req.query;
