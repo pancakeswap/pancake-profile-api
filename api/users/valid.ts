@@ -5,7 +5,7 @@ export default async (req: NowRequest, res: NowResponse): Promise<NowResponse> =
   const { username } = req.query;
 
   const { valid, message } = await isValid(username as string);
-  if (message) {
+  if (!valid && message) {
     return res.status(400).json({ error: { message } });
   }
 
