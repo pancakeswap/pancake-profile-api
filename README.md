@@ -7,6 +7,23 @@ Serverless API implementation for PancakeSwap Profile smart contract on Binance 
 - [Vercel CLI](https://vercel.com/download)
     - Required to emulate local environment (serverless functions).
 
+# Configuration
+
+1. Database
+
+You can configure your database URI for any development purpose by exporting an environment variable.
+
+```shell
+# Default: mongodb://localhost:27017/profile
+export MONGO_URI = "";
+```
+
+2. Blacklist
+
+You can configure (add/edit/remove) the blacklist by editing the file located [here](utils/blacklist.json).
+
+> Note: All blacklisted words must be LOWERCASE.
+
 # Development
 
 ## Install requirements
