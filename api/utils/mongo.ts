@@ -1,4 +1,4 @@
-import mongoose, { Connection } from "mongoose";
+import mongoose, { Connection, Model } from "mongoose";
 import { userSchema } from "./schemas";
 
 let connection: Connection | null = null;
@@ -23,4 +23,11 @@ export const getConnection = async (): Promise<Connection> => {
   }
 
   return connection;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getUserModel = async (): Promise<Model<any>> => {
+  connection = await getConnection();
+
+  return connection.model("User");
 };
