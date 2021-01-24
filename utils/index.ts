@@ -1,5 +1,5 @@
 import { hashPersonalMessage, fromRpcSig, ecrecover, publicToAddress, bufferToHex } from "ethereumjs-util";
-import blacklist from "../utils/blacklist.json";
+import blacklist from "./blacklist.json";
 import { getModel } from "./mongo";
 
 /**

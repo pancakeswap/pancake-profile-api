@@ -1,6 +1,6 @@
 import { NowRequest, NowResponse } from "@vercel/node";
-import { verifyMessage } from "../utils";
-import { getModel } from "../utils/mongo";
+import { verifyMessage } from "../../utils";
+import { getModel } from "../../utils/mongo";
 
 export default async (req: NowRequest, res: NowResponse): Promise<NowResponse> => {
   const { address, message, signature } = req.body;
