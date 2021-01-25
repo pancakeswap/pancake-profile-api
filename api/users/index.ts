@@ -10,5 +10,10 @@ export default async (req: NowRequest, res: NowResponse): Promise<NowResponse> =
     return res.status(404).json({ error: { message: "Entity not found." } });
   }
 
-  return res.status(200).json(user);
+  return res.status(200).json({
+    address: user.address,
+    username: user.username,
+    created_at: user.created_at,
+    updated_at: user.updated_at,
+  });
 };
