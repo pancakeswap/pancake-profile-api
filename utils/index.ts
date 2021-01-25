@@ -68,20 +68,20 @@ export const isValid = async (username: string): Promise<{ valid: boolean; messa
     };
   }
 
+  // Cannot create a username which violates blacklist
+  if (username.toLowerCase().match(blacklist.join("|"))) {
+    return {
+      valid: false,
+      message: "Username not allowed",
+    };
+  }
+
   // Cannot have the same username as another user (Case insensitive)
   const userModel = await getModel("User");
   if (await userModel.exists({ username })) {
     return {
       valid: false,
       message: "Username taken",
-    };
-  }
-
-  // Cannot create a username which violates blacklist
-  if (username.toLowerCase().match(blacklist.join("|"))) {
-    return {
-      valid: false,
-      message: "Username not allowed",
     };
   }
 
