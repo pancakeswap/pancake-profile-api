@@ -15,23 +15,27 @@ import { getModel } from "./mongo";
  *
  * @param {string} message
  * @param {string} signature
- * @returns string
+ * @returns {string|undefined}
  */
-export const verifyMessage = (message: string, signature: string): string => {
-  // Returns the keccak-256 hash of `message`, prefixed with the header used by the `eth_sign` RPC call.
-  const msgHash = hashPersonalMessage(Buffer.from(message, "utf-8"));
+export const verifyMessage = (message: string, signature: string): string | undefined => {
+  try {
+    // Returns the keccak-256 hash of `message`, prefixed with the header used by the `eth_sign` RPC call.
+    const msgHash = hashPersonalMessage(Buffer.from(message, "utf-8"));
 
-  // Convert signature format of the `eth_sign` RPC method to signature parameters.
-  const { v, r, s } = fromRpcSig(signature);
+    // Convert signature format of the `eth_sign` RPC method to signature parameters.
+    const { v, r, s } = fromRpcSig(signature);
 
-  // ECDSA public key recovery from signature.
-  const publicKey = ecrecover(msgHash, v, r, s, 56);
+    // ECDSA public key recovery from signature.
+    const publicKey = ecrecover(msgHash, v, r, s, 56);
 
-  // Returns the ethereum address of a given public key.
-  // Converts a `Buffer` into a `0x`-prefixed hex `String`.
-  const address = bufferToHex(publicToAddress(publicKey, true));
+    // Returns the ethereum address of a given public key.
+    // Converts a `Buffer` into a `0x`-prefixed hex `String`.
+    const address = bufferToHex(publicToAddress(publicKey, true));
 
-  return address;
+    return address;
+  } catch (error) {
+    return;
+  }
 };
 
 /**
@@ -40,7 +44,7 @@ export const verifyMessage = (message: string, signature: string): string => {
  * @see https://github.com/pancakeswap/pancake-profile/blob/master/user-stories.md#step-4-username-creation
  *
  * @param {string} username
- * @returns {boolean, string}
+ * @returns {Promise<{ valid: boolean; message?: string }>}
  */
 export const isValid = async (username: string): Promise<{ valid: boolean; message?: string }> => {
   // Cannot use a username of less than 3 characters
