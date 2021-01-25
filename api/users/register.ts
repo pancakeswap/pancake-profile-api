@@ -11,7 +11,12 @@ export default async (req: NowRequest, res: NowResponse): Promise<NowResponse> =
   }
 
   const userModel = await getModel("User");
-  const user = await new userModel({ address, username: message, created_at: Date.now(), updated_at: null }).save();
+  const user = await new userModel({
+    address,
+    username: message,
+    created_at: Date.now(),
+    updated_at: null,
+  }).save();
 
   return res.status(201).json(user);
 };
