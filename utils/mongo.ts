@@ -8,7 +8,7 @@ let connection: Connection | null = null;
  * @see https://mongoosejs.com/docs/lambda.html
  */
 export const getConnection = async (): Promise<Connection> => {
-  if (connection == null) {
+  if (connection === null) {
     const uri = process.env.MONGO_URI ?? "mongodb://localhost:27017/profile";
     connection = mongoose.createConnection(uri, {
       useNewUrlParser: true,
