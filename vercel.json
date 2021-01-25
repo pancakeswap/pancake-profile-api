@@ -26,10 +26,6 @@
         },
         {
           "key": "Cache-Control",
-          "value": "s-maxage=3600, stale-while-revalidate=86400"
-        },
-        {
-          "key": "Cache-Control",
           "value": "no-cache, no-store, must-revalidate"
         },
         {
