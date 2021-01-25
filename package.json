@@ -7,8 +7,8 @@
   "author": "PancakeSwap",
   "license": "MIT",
   "scripts": {
-    "format": "prettier --write 'api/**/*.{js,ts}'",
-    "lint": "eslint 'api/**/*.{js,ts}'"
+    "format": "prettier --write '*/**/*.{js,ts}'",
+    "lint": "eslint '*/**/*.{js,ts}'"
   },
   "husky": {
     "hooks": {

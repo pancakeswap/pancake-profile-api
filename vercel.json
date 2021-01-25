@@ -11,30 +11,30 @@
   "headers": [
     {
       "source": "/(.*)",
-      "headers" : [
+      "headers": [
         {
-          "key": "Access-Control-Allow-Origin", 
-          "value": "*" 
-        },
-        {
-          "key": "Access-Control-Allow-Methods", 
-          "value": "GET, HEAD, OPTIONS" 
-        },
-        {
-          "key": "Access-Control-Allow-Headers", 
+          "key": "Access-Control-Allow-Origin",
           "value": "*"
         },
         {
-          "key" : "Cache-Control",
-          "value" : "s-maxage=3600, stale-while-revalidate=86400"
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, HEAD, POST, OPTIONS"
         },
         {
-          "key" : "Cache-Control",
-          "value" : "no-cache, no-store, must-revalidate"
+          "key": "Access-Control-Allow-Headers",
+          "value": "*"
         },
         {
-          "key" : "Pragma",
-          "value" : "no-cache"
+          "key": "Cache-Control",
+          "value": "s-maxage=3600, stale-while-revalidate=86400"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
         }
       ]
     }
