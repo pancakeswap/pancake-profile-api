@@ -2,7 +2,11 @@ import { NowRequest, NowResponse } from "@vercel/node";
 import { isValid, verifyMessage } from "../../utils";
 import { getModel } from "../../utils/mongo";
 
-export default async (req: NowRequest, res: NowResponse): Promise<NowResponse> => {
+export default async (req: NowRequest, res: NowResponse): Promise<NowResponse | void> => {
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   const { address, username, signature } = req.body;
 
   const { valid, message } = await isValid(username);
