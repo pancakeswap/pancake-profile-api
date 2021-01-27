@@ -26,7 +26,7 @@ export const verifyMessage = (message: string, signature: string): string | unde
     const { v, r, s } = fromRpcSig(signature);
 
     // ECDSA public key recovery from signature.
-    const publicKey = ecrecover(msgHash, v, r, s, 56);
+    const publicKey = ecrecover(msgHash, v, r, s);
 
     // Returns the ethereum address of a given public key.
     // Converts a `Buffer` into a `0x`-prefixed hex `String`.
