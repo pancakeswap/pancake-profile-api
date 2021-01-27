@@ -15,7 +15,7 @@ export default async (req: NowRequest, res: NowResponse): Promise<NowResponse | 
   }
 
   const signedAddress = verifyMessage(username, signature);
-  if (address !== signedAddress) {
+  if (address.toLowerCase() !== signedAddress) {
     return res.status(400).json({ error: { message: "Invalid signature." } });
   }
 
