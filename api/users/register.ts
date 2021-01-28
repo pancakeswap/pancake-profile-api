@@ -21,7 +21,7 @@ export default async (req: NowRequest, res: NowResponse): Promise<NowResponse | 
 
   const userModel = await getModel("User");
   const user = await new userModel({
-    address,
+    address: address.toLowerCase(),
     username,
     created_at: Date.now(),
     updated_at: null,

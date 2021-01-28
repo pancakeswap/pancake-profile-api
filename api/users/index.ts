@@ -7,9 +7,10 @@ export default async (req: NowRequest, res: NowResponse): Promise<NowResponse | 
   }
 
   const { address } = req.query;
+  const sanitizedAddress: string = address as string;
 
   const userModel = await getModel("User");
-  const user = await userModel.findOne({ address }).lean();
+  const user = await userModel.findOne({ address: sanitizedAddress.toLowerCase() }).lean();
   if (!user) {
     return res.status(404).json({ error: { message: "Entity not found." } });
   }
