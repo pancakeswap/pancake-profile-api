@@ -24,6 +24,7 @@ export default async (req: NowRequest, res: NowResponse): Promise<NowResponse | 
     const user = await new userModel({
       address: address.toLowerCase(),
       username,
+      slug: username.toLowerCase(),
       created_at: Date.now(),
       updated_at: null,
     }).save();

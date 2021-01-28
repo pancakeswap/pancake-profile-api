@@ -16,6 +16,10 @@ export const userSchema: Schema = new Schema(
       },
       required: true,
     },
+    slug: {
+      type: String,
+      required: true,
+    },
     created_at: {
       type: Date,
       default: Date.now,

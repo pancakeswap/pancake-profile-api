@@ -82,7 +82,7 @@ export const isValid = async (username: string): Promise<{ valid: boolean; messa
 
   // Cannot have the same username as another user (Case insensitive)
   const userModel = await getModel("User");
-  if (await userModel.exists({ username })) {
+  if (await userModel.exists({ slug: username.toLowerCase() })) {
     return {
       valid: false,
       message: "Username taken",
