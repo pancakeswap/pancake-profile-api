@@ -1,4 +1,5 @@
 import { NowRequest, NowResponse } from "@vercel/node";
+import { toChecksumAddress } from "ethereumjs-util";
 import { getModel } from "../../utils/mongo";
 
 export default async (req: NowRequest, res: NowResponse): Promise<NowResponse | void> => {
@@ -16,7 +17,7 @@ export default async (req: NowRequest, res: NowResponse): Promise<NowResponse | 
   }
 
   return res.status(200).json({
-    address: user.address,
+    address: toChecksumAddress(user.address),
     username: user.username,
     created_at: user.created_at,
     updated_at: user.updated_at,
