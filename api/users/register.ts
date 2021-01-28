@@ -20,12 +20,18 @@ export default async (req: NowRequest, res: NowResponse): Promise<NowResponse | 
   }
 
   const userModel = await getModel("User");
-  const user = await new userModel({
-    address: address.toLowerCase(),
-    username,
-    created_at: Date.now(),
-    updated_at: null,
-  }).save();
+  if (!(await userModel.exists({ address: address.toLowerCase() }))) {
+    const user = await new userModel({
+      address: address.toLowerCase(),
+      username,
+      created_at: Date.now(),
+      updated_at: null,
+    }).save();
 
-  return res.status(201).json(user);
+    return res.status(201).json(user);
+  } else {
+    return res.status(400).json({ error: { message: "Address already registered." } });
+  }
+
+  return res.status(500).json({ error: { message: "Internal Server Error." } });
 };
