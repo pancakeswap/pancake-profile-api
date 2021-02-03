@@ -1,7 +1,6 @@
 import { NowRequest, NowResponse } from "@vercel/node";
+import { version } from "../package.json";
 
 export default (req: NowRequest, res: NowResponse): void => {
-  const time = new Date().getTime();
-
-  res.json({ time });
+  res.json({ version });
 };

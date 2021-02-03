@@ -45,8 +45,8 @@ vercel dev
 Endpoints are based on filename inside the `api/` folder.
 
 ```shell
-# api/time.ts
-curl -X GET 'localhost:3000/api/time'
+# api/version.ts
+curl -X GET 'localhost:3000/api/version'
 
 # ...
 ```
