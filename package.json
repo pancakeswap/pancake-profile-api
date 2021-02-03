@@ -1,6 +1,6 @@
 {
   "name": "pancake-profile-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Serverless API implementation for PancakeSwap Profile smart contract on Binance Smart Chain.",
   "main": "api/time.ts",
   "repository": "git@github.com:pancakeswap/pancake-profile-api.git",
@@ -17,16 +17,16 @@
     }
   },
   "dependencies": {
-    "ethereumjs-util": "^7.0.7",
-    "mongoose": "^5.11.13"
+    "ethereumjs-util": "^7.0.8",
+    "mongoose": "^5.11.14"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.14.0",
-    "@typescript-eslint/parser": "^4.14.0",
+    "@typescript-eslint/eslint-plugin": "^4.14.2",
+    "@typescript-eslint/parser": "^4.14.2",
     "@vercel/node": "^1.9.0",
-    "eslint": "^7.18.0",
+    "eslint": "^7.19.0",
     "eslint-config-prettier": "^7.2.0",
     "husky": "^4.3.8",
     "prettier": "^2.2.1",
