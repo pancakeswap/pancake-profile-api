@@ -18,6 +18,9 @@ export const userSchema: Schema = new Schema(
     },
     slug: {
       type: String,
+      index: {
+        unique: true,
+      },
       required: true,
     },
     created_at: {
