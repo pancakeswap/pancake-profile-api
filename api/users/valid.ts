@@ -3,7 +3,7 @@ import { isValid } from "../../utils";
 
 export default async (req: NowRequest, res: NowResponse): Promise<NowResponse | void> => {
   if (req.method === "OPTIONS") {
-    return res.status(200).end();
+    return res.status(204).end();
   }
 
   const { username } = req.query;
