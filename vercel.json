@@ -8,6 +8,16 @@
       "permanent": true
     }
   ],
+  "rewrites": [
+    {
+      "source": "/api/users/:address",
+      "destination": "/api/users"
+    },
+    {
+      "source": "/api/users/valid/:username",
+      "destination": "/api/users/valid"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
