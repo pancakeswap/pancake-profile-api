@@ -11,7 +11,7 @@ export default async (req: NowRequest, res: NowResponse): Promise<NowResponse | 
   address = address as string;
 
   // Sanity check for address; to avoid any SQL-like injections, ...
-  if (address.match(/^0x[0-9a-fA-F]{40}$/)) {
+  if (address && address.match(/^0x[0-9a-fA-F]{40}$/)) {
     const userModel = await getModel("User");
     const user = await userModel.findOne({ address: address.toLowerCase() }).lean();
     if (!user) {
