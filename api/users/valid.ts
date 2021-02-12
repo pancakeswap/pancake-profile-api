@@ -2,7 +2,7 @@ import { NowRequest, NowResponse } from "@vercel/node";
 import { isValid } from "../../utils";
 
 export default async (req: NowRequest, res: NowResponse): Promise<NowResponse | void> => {
-  if (req.method === "OPTIONS") {
+  if (req.method?.toUpperCase() === "OPTIONS") {
     return res.status(204).end();
   }
 
