@@ -3,7 +3,7 @@ import { toChecksumAddress } from "ethereumjs-util";
 import { getModel } from "../../utils/mongo";
 
 export default async (req: NowRequest, res: NowResponse): Promise<NowResponse | void> => {
-  if (req.method === "OPTIONS") {
+  if (req.method?.toUpperCase() === "OPTIONS") {
     return res.status(204).end();
   }
 

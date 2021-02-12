@@ -28,11 +28,11 @@
         },
         {
           "key": "Access-Control-Allow-Methods",
-          "value": "GET, HEAD, POST, OPTIONS"
+          "value": "GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS"
         },
         {
           "key": "Access-Control-Allow-Headers",
-          "value": "*"
+          "value": "Accept, Content-Type, Origin"
         },
         {
           "key": "Access-Control-Max-Age",
