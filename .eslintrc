@@ -5,6 +5,10 @@
     "es6": true,
     "node": true
   },
+  "plugins": [
+    "@typescript-eslint",
+    "jest"
+  ],
   "extends": [
     "prettier",
     "prettier/@typescript-eslint",
