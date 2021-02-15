@@ -1,12 +1,24 @@
 import { isValid } from "../utils";
-import { getConnection } from "../utils/mongo";
+import { getConnection, getModel } from "../utils/mongo";
 import { Connection } from "mongoose";
 
 describe("UTILS - isValid", () => {
   let connection: Connection | null = null;
 
   beforeAll(async () => {
+    // Get connection before running tests.
     connection = await getConnection();
+
+    // Get model, delete associated collection, insert a new User; for a complete test suite.
+    const userModel = await getModel("User");
+    await userModel.deleteMany({ address: "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82" });
+    await new userModel({
+      address: "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+      username: "CakeIsBae",
+      slug: "cakeisbae",
+      created_at: Date.now(),
+      updated_at: null,
+    }).save();
   });
 
   it("valid username", async () => {
@@ -63,6 +75,13 @@ describe("UTILS - isValid", () => {
 
     expect(valid).toStrictEqual(false);
     expect(message).toStrictEqual("Username not allowed");
+  });
+
+  it("cannot have the same username as another user (case insensitive)", async () => {
+    const { valid, message } = await isValid("CakeIsBae");
+
+    expect(valid).toStrictEqual(false);
+    expect(message).toStrictEqual("Username taken");
   });
 
   afterAll(async () => {
