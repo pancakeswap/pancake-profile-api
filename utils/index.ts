@@ -47,6 +47,14 @@ export const verifyMessage = (message: string, signature: string): string | unde
  * @returns {Promise<{ valid: boolean; message?: string }>}
  */
 export const isValid = async (username: string): Promise<{ valid: boolean; message?: string }> => {
+  // Check if the username is set to avoid unhandled rejection.
+  if (!username) {
+    return {
+      valid: false,
+      message: "Minimum length: 3 characters",
+    };
+  }
+
   // Cannot use a username of less than 3 characters
   if (username.length < 3) {
     return {

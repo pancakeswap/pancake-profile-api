@@ -28,6 +28,13 @@ describe("UTILS - isValid", () => {
     expect(message).toStrictEqual(undefined);
   });
 
+  it("cannot use an empty username", async () => {
+    const { valid, message } = await isValid("");
+
+    expect(valid).toStrictEqual(false);
+    expect(message).toStrictEqual("Minimum length: 3 characters");
+  });
+
   it("cannot use a username of less than 3 characters", async () => {
     const { valid, message } = await isValid("a");
 
