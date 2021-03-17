@@ -11,7 +11,7 @@ on:
 jobs:
   test:
 
-    name: Test
+    name: Jest
     runs-on: ubuntu-latest
 
     steps:

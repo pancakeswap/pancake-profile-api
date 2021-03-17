@@ -7,14 +7,15 @@
   "author": "PancakeSwap",
   "license": "MIT",
   "scripts": {
-    "format": "prettier --write '*/**/*.{js,ts}'",
+    "format:check": "prettier --check '*/**/*.{js,ts}'",
+    "format:write": "prettier --write '*/**/*.{js,ts}'",
     "lint": "eslint '*/**/*.{js,ts}'",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn format",
+      "pre-commit": "yarn format:write",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
