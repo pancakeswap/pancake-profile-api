@@ -2,14 +2,18 @@
 
 Serverless API implementation for PancakeSwap Profile smart contract on Binance Smart Chain.
 
-## Dependencies
+# Dependencies
 
 - [Vercel CLI](https://vercel.com/download)
     - Required to emulate local environment (serverless functions).
 
+# Documentation
+
+Documentation is available [here](docs/README.md).
+
 # Configuration
 
-1. Database
+# 1. Database
 
 You can configure your database URI for any development purpose by exporting an environment variable.
 
@@ -18,7 +22,7 @@ You can configure your database URI for any development purpose by exporting an 
 export MONGO_URI = "";
 ```
 
-2. Blacklist
+# 2. Blacklist
 
 You can configure (add/edit/remove) the blacklist by editing the file located [here](utils/blacklist.json).
 
