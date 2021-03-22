@@ -8,18 +8,25 @@ export default async (req: NowRequest, res: NowResponse): Promise<NowResponse | 
     return res.status(204).end();
   }
 
-  const userModel = await getModel("User");
-  const users = await userModel
-    .find({ leaderboard: { $exists: true } })
-    .sort({ "leaderboard.team": "asc" })
-    .exec();
+  let { teamId } = req.query;
+  teamId = teamId as string;
 
-  const data = users.map((user: User) => ({
-    rank: user.leaderboard?.team,
-    address: toChecksumAddress(user.address),
-    username: user.username,
-    volume: user.leaderboard?.volume,
-  }));
+  if (teamId) {
+    const userModel = await getModel("User");
+    const users = await userModel
+      .find({ team_id: teamId, leaderboard: { $exists: true } })
+      .sort({ "leaderboard.team": "asc" })
+      .exec();
 
-  return res.status(200).json({ total: users.length, data });
+    const data = users.map((user: User) => ({
+      rank: user.leaderboard?.team,
+      address: toChecksumAddress(user.address),
+      username: user.username,
+      volume: user.leaderboard?.volume,
+    }));
+
+    return res.status(200).json({ total: users.length, data });
+  }
+
+  return res.status(400).json({ error: { message: "Team unknown." } });
 };

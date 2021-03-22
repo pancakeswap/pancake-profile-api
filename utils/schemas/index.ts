@@ -5,6 +5,10 @@ export const leaderboardSchema: Schema = new Schema({
     type: Number,
     default: 0,
   },
+  team_id: {
+    type: Number,
+    default: 0,
+  },
   team: {
     type: Number,
     default: 0,
