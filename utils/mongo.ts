@@ -10,7 +10,7 @@ let connection: Connection | null = null;
 export const getConnection = async (): Promise<Connection> => {
   if (connection === null) {
     /* istanbul ignore next */
-    const uri = "mongodb://localhost:27017/pancake";
+    const uri = process.env.MONGO_URI ?? "mongodb://localhost:27017/profile";
     connection = mongoose.createConnection(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
