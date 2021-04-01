@@ -1,8 +1,8 @@
-import { NowRequest, NowResponse } from "@vercel/node";
+import { VercelRequest, VercelResponse } from "@vercel/node";
 import { toChecksumAddress } from "ethereumjs-util";
 import { getModel } from "../../utils/mongo";
 
-export default async (req: NowRequest, res: NowResponse): Promise<NowResponse | void> => {
+export default async (req: VercelRequest, res: VercelResponse): Promise<VercelResponse | void> => {
   if (req.method?.toUpperCase() === "OPTIONS") {
     return res.status(204).end();
   }

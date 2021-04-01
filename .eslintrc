@@ -11,14 +11,13 @@
   ],
   "extends": [
     "prettier",
-    "prettier/@typescript-eslint",
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["warn"],
+    "@typescript-eslint/no-unused-vars": ["error"],
     "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": ["warn"],
+    "@typescript-eslint/no-use-before-define": ["error"],
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"]
   }
