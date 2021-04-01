@@ -24,7 +24,7 @@ export default async (req: NowRequest, res: NowResponse): Promise<NowResponse | 
       leaderboard: {
         global: user.leaderboard?.global ?? "???",
         team: user.leaderboard?.team ?? "???",
-        volume: user.leaderboard?.volume ?? "???",
+        volume: user.leaderboard?.volume ?? 0,
       },
       created_at: user.created_at,
       updated_at: user.updated_at,
