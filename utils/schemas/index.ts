@@ -1,5 +1,24 @@
 import { Schema } from "mongoose";
 
+export const leaderboardSchema: Schema = new Schema({
+  global: {
+    type: Number,
+    default: 0,
+  },
+  team_id: {
+    type: Number,
+    default: 0,
+  },
+  team: {
+    type: Number,
+    default: 0,
+  },
+  volume: {
+    type: Number,
+    default: 0,
+  },
+});
+
 export const userSchema: Schema = new Schema(
   {
     address: {
@@ -22,6 +41,10 @@ export const userSchema: Schema = new Schema(
         unique: true,
       },
       required: true,
+    },
+    leaderboard: {
+      type: leaderboardSchema,
+      required: false,
     },
     created_at: {
       type: Date,

@@ -16,6 +16,10 @@
     {
       "source": "/api/users/valid/:username",
       "destination": "/api/users/valid"
+    },
+    {
+      "source": "/api/leaderboard/team/:teamId",
+      "destination": "/api/leaderboard/team"
     }
   ],
   "headers": [
