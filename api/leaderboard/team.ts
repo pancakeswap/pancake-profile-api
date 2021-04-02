@@ -14,7 +14,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
   if (teamId) {
     const userModel = await getModel("User");
     const users = await userModel
-      .find({ team_id: teamId, leaderboard: { $exists: true } })
+      .find({ team: teamId, leaderboard: { $exists: true } })
       .sort({ "leaderboard.team": "asc" })
       .exec();
 
