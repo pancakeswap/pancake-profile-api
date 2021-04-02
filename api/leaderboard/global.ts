@@ -9,6 +9,16 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
   }
 
   const userModel = await getModel("User");
+
+  const volume = await userModel.aggregate([
+    {
+      $group: {
+        _id: null,
+        volume: { $sum: "$leaderboard.volume" },
+      },
+    },
+  ]);
+
   const users = await userModel
     .find({ leaderboard: { $exists: true } })
     .sort({ "leaderboard.global": "asc" })
@@ -21,5 +31,5 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
     volume: user.leaderboard?.volume,
   }));
 
-  return res.status(200).json({ total: users.length, data });
+  return res.status(200).json({ total: users.length, volume: volume[0].volume, data });
 };
