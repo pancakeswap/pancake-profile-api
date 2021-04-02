@@ -13,9 +13,21 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
 
   if (teamId) {
     const userModel = await getModel("User");
+
+    const volume = await userModel.aggregate([
+      { $match: { team: teamId } },
+      {
+        $group: {
+          _id: null,
+          volume: { $sum: "$leaderboard.volume" },
+        },
+      },
+    ]);
+
     const users = await userModel
       .find({ team: teamId, leaderboard: { $exists: true } })
       .sort({ "leaderboard.team": "asc" })
+      .limit(20)
       .exec();
 
     const data = users.map((user: User) => ({
@@ -25,7 +37,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
       volume: user.leaderboard?.volume,
     }));
 
-    return res.status(200).json({ total: users.length, data });
+    return res.status(200).json({ total: users.length, volume: volume[0].volume, data });
   }
 
   return res.status(400).json({ error: { message: "Team unknown." } });
