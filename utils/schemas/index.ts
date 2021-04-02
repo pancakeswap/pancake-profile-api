@@ -5,10 +5,6 @@ export const leaderboardSchema: Schema = new Schema({
     type: Number,
     default: 0,
   },
-  team_id: {
-    type: Number,
-    default: 0,
-  },
   team: {
     type: Number,
     default: 0,
@@ -41,6 +37,10 @@ export const userSchema: Schema = new Schema(
         unique: true,
       },
       required: true,
+    },
+    team: {
+      type: String,
+      required: false,
     },
     leaderboard: {
       type: leaderboardSchema,
