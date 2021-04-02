@@ -22,6 +22,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
   const users = await userModel
     .find({ leaderboard: { $exists: true } })
     .sort({ "leaderboard.global": "asc" })
+    .limit(20)
     .exec();
 
   const data = users.map((user: User) => ({
