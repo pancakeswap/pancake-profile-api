@@ -16,6 +16,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
 
     const volume = await userModel.aggregate([
       { $match: { team: teamId } },
+      { $limit: 500 },
       {
         $group: {
           _id: null,
