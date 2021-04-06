@@ -30,7 +30,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
     address: toChecksumAddress(user.address),
     username: user.username,
     volume: user.leaderboard?.volume,
-    teamId: user.leaderboard?.team,
+    teamId: parseInt(user?.team),
   }));
 
   return res.status(200).json({ total: users.length, volume: volume[0].volume, data });
