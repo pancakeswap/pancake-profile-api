@@ -13,4 +13,5 @@ export interface Leaderboard {
   global: number;
   team: number;
   volume: number;
+  next_rank: number;
 }

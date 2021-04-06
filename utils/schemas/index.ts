@@ -13,6 +13,10 @@ export const leaderboardSchema: Schema = new Schema({
     type: Number,
     default: 0,
   },
+  next_rank: {
+    type: Number,
+    default: 0,
+  },
 });
 
 export const userSchema: Schema = new Schema(

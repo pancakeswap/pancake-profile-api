@@ -25,6 +25,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
         global: user.leaderboard?.global ?? "???",
         team: user.leaderboard?.team ?? "???",
         volume: user.leaderboard?.volume ?? 0,
+        next_rank: user.leaderboard?.next_rank ?? "???",
       },
       created_at: user.created_at,
       updated_at: user.updated_at,
