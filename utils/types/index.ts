@@ -4,6 +4,7 @@ export interface User extends Document {
   address: string;
   username: string;
   slug: string;
+  team: string;
   leaderboard?: Leaderboard;
   created_at: Date;
   updated_at: Date;
