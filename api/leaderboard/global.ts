@@ -1,37 +1,51 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { toChecksumAddress } from "ethereumjs-util";
-import { getModel } from "../../utils/mongo";
-import { User } from "../../utils/types";
+import { gql, request } from "graphql-request";
+import { TRADING_COMPETITION_V1_SUBGRAPH } from "../../utils";
+
+interface User {
+  id: string;
+  volumeUSD: string;
+  team: {
+    id: string;
+  };
+}
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<VercelResponse | void> => {
   if (req.method?.toUpperCase() === "OPTIONS") {
     return res.status(204).end();
   }
 
-  const userModel = await getModel("User");
+  const result = await request(
+    TRADING_COMPETITION_V1_SUBGRAPH,
+    gql`
+      {
+        competition(id: "1") {
+          id
+          userCount
+          volumeUSD
+        }
+        users(first: 500, orderBy: volumeUSD, orderDirection: desc, block: { number: 6553043 }) {
+          id
+          volumeUSD
+          team {
+            id
+          }
+        }
+      }
+    `
+  );
 
-  const volume = await userModel.aggregate([
-    {
-      $group: {
-        _id: null,
-        volume: { $sum: "$leaderboard.volume" },
-      },
-    },
-  ]);
-
-  const users = await userModel
-    .find({ leaderboard: { $exists: true } })
-    .sort({ "leaderboard.global": "asc" })
-    .limit(20)
-    .exec();
-
-  const data = users.map((user: User) => ({
-    rank: user.leaderboard?.global,
-    address: toChecksumAddress(user.address),
-    username: user.username,
-    volume: user.leaderboard?.volume,
-    teamId: parseInt(user?.team),
+  const data = result.users.map((user: User, index: number) => ({
+    rank: index + 1,
+    address: toChecksumAddress(user.id),
+    volume: parseFloat(user.volumeUSD),
+    teamId: parseInt(user.team.id),
   }));
 
-  return res.status(200).json({ total: users.length, volume: volume[0].volume, data });
+  return res.status(200).json({
+    total: parseInt(result.competition.userCount),
+    volume: parseFloat(result.competition.volumeUSD),
+    data,
+  });
 };
