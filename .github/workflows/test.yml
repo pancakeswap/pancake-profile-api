@@ -24,9 +24,10 @@ jobs:
           node-version: 14.x
 
       - name: Setup MongoDB
-        uses: supercharge/mongodb-github-action@1.3.0
+        uses: supercharge/mongodb-github-action@1.4.1
         with:
           mongodb-version: 4.4
+          mongodb-port: 42069
 
       - name: Install dependencies
         run: yarn install
@@ -34,4 +35,4 @@ jobs:
       - name: Run Jest
         run: yarn test:coverage
         env:
-          MONGO_URI: "mongodb://127.0.0.1:27017/jest"
+          MONGO_URI: "mongodb://127.0.0.1:42069/jest"
