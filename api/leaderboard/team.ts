@@ -1,7 +1,7 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { toChecksumAddress } from "ethereumjs-util";
-import { getModel } from "../../utils/mongo";
-import { User } from "../../utils/types";
+import { gql, request } from "graphql-request";
+import { TRADING_COMPETITION_V1_SUBGRAPH } from "../../utils";
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<VercelResponse | void> => {
   if (req.method?.toUpperCase() === "OPTIONS") {
@@ -12,34 +12,33 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
   teamId = teamId as string;
 
   if (teamId) {
-    const userModel = await getModel("User");
+    const results = await request(
+      TRADING_COMPETITION_V1_SUBGRAPH,
+      gql`
+        {
+            users(first: 500, where: { team: "${teamId}" }, block: { number: 6553043 }, orderBy: volumeUSD, orderDirection: desc) {
+                id
+                volumeUSD
+                team {
+                    id
+                }
+            }
+        }
+    `
+    );
 
-    const volume = await userModel.aggregate([
-      { $match: { team: teamId } },
-      { $limit: 500 },
-      {
-        $group: {
-          _id: null,
-          volume: { $sum: "$leaderboard.volume" },
-        },
-      },
-    ]);
+    const volume = results.users.reduce((acc: any, user: any) => {
+      return acc + parseFloat(user.volumeUSD);
+    }, 0);
 
-    const users = await userModel
-      .find({ team: teamId, leaderboard: { $exists: true } })
-      .sort({ "leaderboard.team": "asc" })
-      .limit(20)
-      .exec();
-
-    const data = users.map((user: User) => ({
-      rank: user.leaderboard?.team,
-      address: toChecksumAddress(user.address),
-      username: user.username,
-      volume: user.leaderboard?.volume,
-      teamId: parseInt(user?.team),
+    const data = results.users.map((user: any, index: number) => ({
+      rank: index + 1,
+      address: toChecksumAddress(user.id),
+      volume: parseFloat(user.volumeUSD),
+      teamId: parseInt(user.team.id),
     }));
 
-    return res.status(200).json({ total: users.length, volume: volume[0].volume, data });
+    return res.status(200).json({ total: results.users.length, volume: volume, data });
   }
 
   return res.status(400).json({ error: { message: "Team unknown." } });

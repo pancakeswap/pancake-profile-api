@@ -8,6 +8,9 @@ import {
 import blacklist from "./blacklist.json";
 import { getModel } from "./mongo";
 
+export const TRADING_COMPETITION_V1_SUBGRAPH =
+  "https://api.thegraph.com/subgraphs/name/pancakeswap/trading-competition-v1";
+
 /**
  * Recover the msg.sender for a given signature based on a message.
  *
