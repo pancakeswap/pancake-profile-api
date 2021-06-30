@@ -1,6 +1,6 @@
 {
   "name": "pancake-profile-api",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Serverless API implementation for PancakeSwap Profile smart contract on Binance Smart Chain.",
   "main": "api/version.ts",
   "repository": "git@github.com:pancakeswap/pancake-profile-api.git",
