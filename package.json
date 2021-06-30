@@ -21,9 +21,9 @@
   },
   "dependencies": {
     "ethereumjs-util": "^7.0.10",
-    "graphql": "^15.5.0",
+    "graphql": "^15.5.1",
     "graphql-request": "^3.4.0",
-    "mongoose": "^5.12.11"
+    "mongoose": "^5.13.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
