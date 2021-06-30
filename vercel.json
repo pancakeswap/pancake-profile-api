@@ -53,7 +53,7 @@
       ]
     },
     {
-      "source": "/users/(.*)",
+      "source": "/api/users/(.*)",
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
