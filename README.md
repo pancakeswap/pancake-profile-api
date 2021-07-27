@@ -1,11 +1,11 @@
-# pancake-profile-api
+# PancakeSwap Profile API
 
-Serverless API implementation for PancakeSwap Profile smart contract on Binance Smart Chain.
+Serverless API implementation for PancakeSwap Profile contract
 
 # Dependencies
 
 - [Vercel CLI](https://vercel.com/download)
-    - Required to emulate local environment (serverless functions).
+    - Required to emulate local environment (serverless).
 
 # Documentation
 
@@ -19,12 +19,12 @@ You can configure your database URI for any development purpose by exporting an 
 
 ```shell
 # Default: mongodb://localhost:27017/profile
-export MONGO_URI = "";
+export MONGO_URI = "mongodb://host:port/database";
 ```
 
 # 2. Blacklist
 
-You can configure (add/edit/remove) the blacklist by editing the file located [here](utils/blacklist.json).
+You can configure (create/update/delete) the blacklist by editing the file located [here](utils/blacklist.json).
 
 > Note: All blacklisted words must be LOWERCASE.
 
@@ -59,7 +59,7 @@ curl -X GET 'localhost:3000/api/version'
 
 ## Deploy
 
-Deployments to production should be triggered by a webhook when a commit, or a pull-request is merged to `master`.
+Deploy to production should be triggered by a webhook when a commit, or a pull-request is merged to `master`.
 
 If you need to force a deployment, use the following command:
 

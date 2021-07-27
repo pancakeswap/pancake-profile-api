@@ -4,27 +4,27 @@ Base endpoint: [profile.pancakeswap.com/api](https://profile.pancakeswap.com/api
 
 All endpoints supports [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
 
-# Misc
+# Miscellaneous
 
 ## 1. Version
 
-> Return the current API version (used to ensure deployment).
+> Return the current API version.
 
 Usage :
 
-```
+```shell
 $ curl -X GET https://profile.pancakeswap.com/api/version
 ```
 
 Response :
 
-```
+```json5
 {
     "version": "1.0.0"
 }
 ```
 
-# Users
+# Profile
 
 # 1. Users
 
@@ -34,27 +34,26 @@ Response :
 
 Usage :
 
-```
+```shell
 $ curl -X GET https://profile.pancakeswap.com/api/users/0x000000000000000000000000000000000000dEaD
 ```
 
 Response :
 
-```
+```json5
 {
-    "adress": <string>,
-    "username": <string>,
+    "adress": "<string>",
+    "username": "<string>",
     "leaderboard": {
-        "global": <integer>,
-        "team": <integer>,
-        "volume": <float>
+        "global": "<integer>",
+        "team": "<integer>",
+        "volume": "<float>",
+        "next_rank": "<float>"
     },
-    "created_at": "2021-01-01T00:00:00.000Z",
-    "updated_at": null
+    "created_at": "<string>",
+    "updated_at": "<string|null>"
 }
 ```
-
-# 2. Register
 
 ### POST /users/register
 
@@ -62,22 +61,20 @@ Response :
 
 Usage :
 
-```
+```shell
 $ curl -X POST -d '{"address": "0x...", "username": "Chef...", "signature": "0x..."}' https://profile.pancakeswap.com/api/users/register
 ```
 
 Response :
 
-```
+```json5
 {
-    "adress": <string>,
-    "username": <string>,
-    "created_at": "2021-01-01T00:00:00.000Z",
-    "updated_at": null
+    "adress": "<string>",
+    "username": "<string>",
+    "created_at": "<string>",
+    "updated_at": "<string|null>"
 }
 ```
-
-# 3. Valid
 
 ### GET /users/valid/{username}
 
@@ -85,54 +82,44 @@ Response :
 
 Usage :
 
-```
+```shell
 $ curl -X GET https://profile.pancakeswap.com/api/users/valid/ChefPancake
 ```
 
 Response :
 
-```
--- Success
+```json5
 {
-    "username": <string>,
-    "valid": <boolean>
-}
-
--- Failure
-{
-    "error": {
-        "message": <string>
-    }
+    "username": "<string>",
+    "valid": "<boolean>"
 }
 ```
 
-# Leaderboard
-
-## 1. Global
+## 2. Team
 
 ### GET /leaderboard/global
 
-> Return global leaderboard, ordered by rank (-> volume in USD).
+> Return leaderboard, ordered by rank (-> volume in USD (desc)).
 
 Usage :
 
-```
+```shell
 $ curl -X GET https://profile.pancakeswap.com/api/leaderboard/global
 ```
 
 Response :
 
-```
+```json5
 {
-    "total": 12345,
+    "total": "<integer>",
+    "volume": "<float>",
     "data": [
         {
-            "rank": <integer>,
-            "adress": <string>,
-            "username": <string>,
-            "volume": <integer>
-        },
-        ...
+            "rank": "<integer>",
+            "address": "<string>",
+            "volume": "<float>",
+            "teamId": "<integer>"
+        }
     ]
 }
 ```
@@ -141,27 +128,27 @@ Response :
 
 ### GET /leaderboard/team/{id}
 
-> Return team leaderboard, per team ID, ordered by rank (-> volume in USD).
+> Return leaderboard, for a given team, ordered by rank (-> volume in USD).
 
 Usage :
 
-```
+```shell
 $ curl -X GET https://profile.pancakeswap.com/api/leaderboard/team/1
 ```
 
 Response :
 
-```
+```json5
 {
-    "total": 12345,
+    "total": "<integer>",
+    "volume": "<float>",
     "data": [
         {
-            "rank": <integer>,
-            "adress": <string>,
-            "username": <string>,
-            "volume": <integer>
-        },
-        ...
+            "rank": "<integer>",
+            "address": "<string>",
+            "volume": "<float>",
+            "teamId": "<integer>"
+        }
     ]
 }
 ```
