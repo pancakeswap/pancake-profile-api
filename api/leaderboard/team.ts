@@ -20,36 +20,37 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
   teamId = teamId as string;
 
   if (teamId) {
-    const result = await request(
+    const { users } = await request(
       TRADING_COMPETITION_V1_SUBGRAPH,
       gql`
-        {
-            users (first: 500, where: { team: "${teamId}" }, orderBy: volumeUSD, orderDirection: desc, block: { number: 6553043 }) {
-                id
-                volumeUSD
-                team {
-                    id
-                    userCount
-                }
+        query getUsersByVolumeDesc($teamId: ID!) {
+          users(first: 500, where: { team: $teamId }, orderBy: volumeUSD, orderDirection: desc) {
+            id
+            volumeUSD
+            team {
+              id
+              userCount
             }
+          }
         }
-    `
+      `,
+      {
+        teamId,
+      }
     );
 
-    const volume = result.users.reduce((acc: number, user: User) => {
+    const volume = users.reduce((acc: number, user: User) => {
       return acc + parseFloat(user.volumeUSD);
     }, 0);
 
-    const data = result.users.map((user: User, index: number) => ({
+    const data = users.map((user: User, index: number) => ({
       rank: index + 1,
       address: toChecksumAddress(user.id),
       volume: parseFloat(user.volumeUSD),
       teamId: parseInt(user.team.id),
     }));
 
-    return res
-      .status(200)
-      .json({ total: parseInt(result.users[0].team.userCount), volume: volume, data });
+    return res.status(200).json({ total: parseInt(users[0].team.userCount), volume: volume, data });
   }
 
   return res.status(400).json({ error: { message: "Team unknown." } });
