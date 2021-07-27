@@ -1,6 +1,6 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { toChecksumAddress } from "ethereumjs-util";
 import { gql, request } from "graphql-request";
+import { getAddress } from "ethers/lib/utils";
 import { TRADING_COMPETITION_V1_SUBGRAPH } from "../../utils";
 
 interface User {
@@ -45,7 +45,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
 
     const data = users.map((user: User, index: number) => ({
       rank: index + 1,
-      address: toChecksumAddress(user.id),
+      address: getAddress(user.id),
       volume: parseFloat(user.volumeUSD),
       teamId: parseInt(user.team.id),
     }));

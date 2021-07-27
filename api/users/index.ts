@@ -1,5 +1,5 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { toChecksumAddress } from "ethereumjs-util";
+import { getAddress, isAddress } from "ethers/lib/utils";
 import { getModel } from "../../utils/mongo";
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<VercelResponse | void> => {
@@ -11,7 +11,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
   address = address as string;
 
   // Sanity check for address; to avoid any SQL-like injections, ...
-  if (address && address.match(/^0x[0-9a-fA-F]{40}$/)) {
+  if (address && isAddress(address)) {
     const userModel = await getModel("User");
     const user = await userModel.findOne({ address: address.toLowerCase() }).exec();
     if (!user) {
@@ -19,7 +19,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
     }
 
     return res.status(200).json({
-      address: toChecksumAddress(user.address),
+      address: getAddress(user.address),
       username: user.username,
       leaderboard: {
         global: user.leaderboard?.global ?? "???",
