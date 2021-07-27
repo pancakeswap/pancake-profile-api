@@ -1,5 +1,6 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { isValid, verifyMessage } from "../../utils";
+import { verifyMessage } from "ethers/lib/utils";
+import { isValid } from "../../utils";
 import { getModel } from "../../utils/mongo";
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<VercelResponse | void> => {
