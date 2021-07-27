@@ -16,7 +16,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
     return res.status(204).end();
   }
 
-  const result = await request(
+  const { competition, users } = await request(
     TRADING_COMPETITION_V1_SUBGRAPH,
     gql`
       {
@@ -25,7 +25,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
           userCount
           volumeUSD
         }
-        users(first: 500, orderBy: volumeUSD, orderDirection: desc, block: { number: 6553043 }) {
+        users(first: 500, orderBy: volumeUSD, orderDirection: desc) {
           id
           volumeUSD
           team {
@@ -36,7 +36,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
     `
   );
 
-  const data = result.users.map((user: User, index: number) => ({
+  const data = users.map((user: User, index: number) => ({
     rank: index + 1,
     address: toChecksumAddress(user.id),
     volume: parseFloat(user.volumeUSD),
@@ -44,8 +44,8 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
   }));
 
   return res.status(200).json({
-    total: parseInt(result.competition.userCount),
-    volume: parseFloat(result.competition.volumeUSD),
+    total: parseInt(competition.userCount),
+    volume: parseFloat(competition.volumeUSD),
     data,
   });
 };

@@ -22,7 +22,7 @@
   "dependencies": {
     "ethereumjs-util": "^7.0.10",
     "graphql": "^15.5.1",
-    "graphql-request": "^3.4.0",
+    "graphql-request": "^3.5.0",
     "mongoose": "^5.13.0"
   },
   "devDependencies": {
@@ -41,6 +41,6 @@
     "prettier": "^2.3.2",
     "ts-jest": "^27.0.3",
     "ts-node": "^10.0.0",
-    "typescript": "^4.3.4"
+    "typescript": "^4.3.5"
   }
 }
