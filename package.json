@@ -20,7 +20,6 @@
     }
   },
   "dependencies": {
-    "ethereumjs-util": "^7.0.10",
     "ethers": "^5.4.2",
     "graphql": "^15.5.1",
     "graphql-request": "^3.5.0",
