@@ -30,7 +30,7 @@ jobs:
           mongodb-port: 42069
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: Run Jest
         run: yarn test:coverage
