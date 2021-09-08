@@ -6,9 +6,6 @@ import { TRADING_COMPETITION_V1_SUBGRAPH } from "../../utils";
 interface User {
   id: string;
   volumeUSD: string;
-  team: {
-    id: string;
-  };
 }
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<VercelResponse | void> => {
@@ -20,16 +17,16 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
   teamId = teamId as string;
 
   if (teamId) {
-    const { users } = await request(
+    const { team } = await request(
       TRADING_COMPETITION_V1_SUBGRAPH,
       gql`
-        query getUsersByVolumeDesc($teamId: ID!) {
-          users(first: 500, where: { team: $teamId }, orderBy: volumeUSD, orderDirection: desc) {
+        query getUsersByTeamOrderedByVolumeDesc($teamId: ID!) {
+          team(id: $teamId) {
             id
-            volumeUSD
-            team {
+            userCount
+            users(first: 500, orderBy: volumeUSD, orderDirection: desc) {
               id
-              userCount
+              volumeUSD
             }
           }
         }
@@ -39,18 +36,18 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
       }
     );
 
-    const volume = users.reduce((acc: number, user: User) => {
+    const volume = team.users.reduce((acc: number, user: User) => {
       return acc + parseFloat(user.volumeUSD);
     }, 0);
 
-    const data = users.map((user: User, index: number) => ({
+    const data = team.users.map((user: User, index: number) => ({
       rank: index + 1,
       address: getAddress(user.id),
       volume: parseFloat(user.volumeUSD),
-      teamId: parseInt(user.team.id),
+      teamId: parseInt(team.id),
     }));
 
-    return res.status(200).json({ total: parseInt(users[0].team.userCount), volume: volume, data });
+    return res.status(200).json({ total: parseInt(team.userCount), volume: volume, data });
   }
 
   return res.status(400).json({ error: { message: "Team unknown." } });
