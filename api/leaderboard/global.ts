@@ -1,7 +1,7 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { gql, request } from "graphql-request";
 import { getAddress } from "ethers/lib/utils";
-import { TRADING_COMPETITION_V1_SUBGRAPH } from "../../utils";
+import { TRADING_COMPETITION_V2_SUBGRAPH_TEST } from "../../utils";
 
 interface User {
   id: string;
@@ -17,10 +17,10 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
   }
 
   const { competition, users } = await request(
-    TRADING_COMPETITION_V1_SUBGRAPH,
+    TRADING_COMPETITION_V2_SUBGRAPH_TEST,
     gql`
       {
-        competition(id: "1") {
+        competition(id: "2") {
           id
           userCount
           volumeUSD
