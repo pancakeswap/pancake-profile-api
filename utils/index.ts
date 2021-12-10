@@ -3,6 +3,8 @@ import { getModel } from "./mongo";
 
 export const TRADING_COMPETITION_V1_SUBGRAPH =
   "https://api.thegraph.com/subgraphs/name/pancakeswap/trading-competition-v1";
+export const TRADING_COMPETITION_V2_SUBGRAPH_TEST =
+  "https://api.thegraph.com/subgraphs/name/pancakeswap/tradingcompv2";
 
 /**
  * Check for the validity of a username based on rules (see documentation).
