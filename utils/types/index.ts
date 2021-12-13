@@ -6,6 +6,7 @@ export interface User extends Document {
   slug: string;
   team: string;
   leaderboard?: Leaderboard;
+  leaderboard_fantoken?: Leaderboard;
   created_at: Date;
   updated_at: Date;
 }

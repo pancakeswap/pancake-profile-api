@@ -27,6 +27,12 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
         volume: user.leaderboard?.volume ?? 0,
         next_rank: user.leaderboard?.next_rank ?? "???",
       },
+      leaderboard_fantoken: {
+        global: user.leaderboard_fantoken?.global ?? "???",
+        team: user.leaderboard_fantoken?.team ?? "???",
+        volume: user.leaderboard_fantoken?.volume ?? 0,
+        next_rank: user.leaderboard_fantoken?.next_rank ?? "???",
+      },
       created_at: user.created_at,
       updated_at: user.updated_at,
     });

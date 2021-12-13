@@ -6,6 +6,8 @@ export const TRADING_COMPETITION_V1_SUBGRAPH =
 export const TRADING_COMPETITION_V2_SUBGRAPH_TEST =
   "https://api.thegraph.com/subgraphs/name/chef-huan/tradingcompv2";
 
+export const TRADING_COMPETITION_SUBGRAPH = TRADING_COMPETITION_V2_SUBGRAPH_TEST;
+
 /**
  * Check for the validity of a username based on rules (see documentation).
  *
