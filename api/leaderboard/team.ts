@@ -1,7 +1,7 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { gql, request } from "graphql-request";
 import { getAddress } from "ethers/lib/utils";
-import { TRADING_COMPETITION_V2_SUBGRAPH_TEST } from "../../utils";
+import { TRADING_COMPETITION_SUBGRAPH } from "../../utils";
 
 interface User {
   id: string;
@@ -18,7 +18,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
 
   if (teamId) {
     const { team } = await request(
-      TRADING_COMPETITION_V2_SUBGRAPH_TEST,
+      TRADING_COMPETITION_SUBGRAPH,
       gql`
         query getUsersByTeamOrderedByVolumeDesc($teamId: ID!) {
           team(id: $teamId) {
