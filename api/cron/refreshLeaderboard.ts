@@ -3,14 +3,43 @@ import { gql, request } from "graphql-request";
 import { getModel } from "../../utils/mongo";
 import { TRADING_COMPETITION_SUBGRAPH } from "../../utils";
 
-const refreshTradingCompLeaderboard = async () => {
-  console.log("TradingCompLeaderboard refresh begin");
+const teamIds = ["1", "2", "3"] as const;
+
+type TeamId = typeof teamIds[number];
+
+type User = {
+  id: string;
+  team: { id: string };
+  volumeUSD: string;
+  globalRank?: number;
+};
+
+const teamResult: Record<TeamId, User[]> = {
+  "1": [],
+  "2": [],
+  "3": [],
+};
+
+const combineTeamResult = () => {
+  return [...teamResult["1"], ...teamResult["2"], ...teamResult["3"]].sort((a, b) => {
+    return Number(a.volumeUSD) > Number(b.volumeUSD) ? -1 : 1;
+  });
+};
+
+const refreshTradingCompLeaderboard = async (team: TeamId = "1", skip = 0) => {
+  console.log("TradingCompLeaderboard refresh begin team:", team, "skip:", skip);
 
   const { users } = await request(
     TRADING_COMPETITION_SUBGRAPH,
     gql`
-      {
-        users(orderBy: volumeUSD, orderDirection: desc) {
+      query getUsersQuery($team: String, $skip: Int) {
+        users(
+          orderBy: volumeUSD
+          orderDirection: desc
+          first: 1000
+          skip: $skip
+          where: { team: $team }
+        ) {
           id
           volumeUSD
           team {
@@ -18,11 +47,25 @@ const refreshTradingCompLeaderboard = async () => {
           }
         }
       }
-    `
+    `,
+    {
+      team,
+      skip,
+    }
   );
 
   console.log("Fetched users count: {}", users.length);
+  if (users.length > 0) {
+    teamResult[team].push(users);
+    if (skip + 1000 < 6000) {
+      await refreshTradingCompLeaderboard(team, skip + 1000);
+    }
+  }
 
+  console.log("TradingCompLeaderboard refresh ended");
+};
+
+const updateLeaderboard = async (users: User[]) => {
   const teamUser = new Map();
   for (let i = 0; i < users.length; i++) {
     users[i].globalRank = i + 1;
@@ -86,8 +129,6 @@ const refreshTradingCompLeaderboard = async () => {
       }
     }
   }
-
-  console.log("TradingCompLeaderboard refresh ended");
 };
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<VercelResponse | void> => {
@@ -97,7 +138,11 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
 
       console.log(process.env.CRON_API_SECRET_KEY);
       if (authorization === `${process.env.CRON_API_SECRET_KEY}`) {
-        await refreshTradingCompLeaderboard();
+        for (const id of teamIds) {
+          await refreshTradingCompLeaderboard(id);
+        }
+        const allUsersWithOrder = combineTeamResult();
+        updateLeaderboard(allUsersWithOrder);
         res.status(200).json({ success: true });
       } else {
         res.status(401).json({ success: false });
