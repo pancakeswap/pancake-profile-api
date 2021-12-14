@@ -38,7 +38,7 @@ const refreshTradingCompLeaderboard = async (team: TeamId = "1", skip = 0) => {
           orderDirection: desc
           first: 1000
           skip: $skip
-          where: { team: $team }
+          where: { team: $team, volumeUSD_gt: 0 }
         ) {
           id
           volumeUSD
