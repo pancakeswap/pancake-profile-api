@@ -56,13 +56,13 @@ const refreshTradingCompLeaderboard = async (team: TeamId = "1", skip = 0) => {
 
   console.log("Fetched users count: {}", users.length);
   if (users.length > 0) {
-    teamResult[team].push(users);
+    teamResult[team].push(...users);
     if (skip + 1000 < 6000) {
       await refreshTradingCompLeaderboard(team, skip + 1000);
     }
   }
 
-  console.log("TradingCompLeaderboard refresh ended");
+  console.log("TradingCompLeaderboard refresh begin team:", team, "skip:", skip);
 };
 
 const updateLeaderboard = async (users: User[]) => {
@@ -138,11 +138,15 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
 
       console.log(process.env.CRON_API_SECRET_KEY);
       if (authorization === `${process.env.CRON_API_SECRET_KEY}`) {
-        for (const id of teamIds) {
-          await refreshTradingCompLeaderboard(id);
+        try {
+          for (const id of teamIds) {
+            await refreshTradingCompLeaderboard(id);
+          }
+        } catch (error) {
+          throw new Error("Error refreshing Trading Competition Leaderboard");
         }
         const allUsersWithOrder = combineTeamResult();
-        updateLeaderboard(allUsersWithOrder);
+        await updateLeaderboard(allUsersWithOrder);
         res.status(200).json({ success: true });
       } else {
         res.status(401).json({ success: false });
