@@ -142,12 +142,12 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
           for (const id of teamIds) {
             await refreshTradingCompLeaderboard(id);
           }
+          const allUsersWithOrder = combineTeamResult();
+          await updateLeaderboard(allUsersWithOrder);
+          res.status(200).json({ success: true });
         } catch (error) {
           throw new Error("Error refreshing Trading Competition Leaderboard");
         }
-        const allUsersWithOrder = combineTeamResult();
-        await updateLeaderboard(allUsersWithOrder);
-        res.status(200).json({ success: true });
       } else {
         res.status(401).json({ success: false });
       }
