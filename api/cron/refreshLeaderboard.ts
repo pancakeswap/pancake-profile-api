@@ -62,7 +62,7 @@ const refreshTradingCompLeaderboard = async (team: TeamId = "1", skip = 0) => {
     }
   }
 
-  console.log("TradingCompLeaderboard refresh begin team:", team, "skip:", skip);
+  console.log("TradingCompLeaderboard refresh end team:", team, "skip:", skip);
 };
 
 const updateLeaderboard = async (users: User[]) => {
