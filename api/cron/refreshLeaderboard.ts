@@ -126,6 +126,7 @@ const updateLeaderboard = async (users: User[]) => {
           .exec();
       } catch (e) {
         console.log(e);
+        throw e;
       }
     }
   }
