@@ -3,10 +3,6 @@ import { gql, request } from "graphql-request";
 import { getModel } from "../../utils/mongo";
 import { TRADING_COMPETITION_SUBGRAPH } from "../../utils";
 
-const teamIds = ["1", "2", "3"] as const;
-
-type TeamId = typeof teamIds[number];
-
 type User = {
   id: string;
   team: { id: string };
@@ -14,31 +10,35 @@ type User = {
   globalRank?: number;
 };
 
-const teamResult: Record<TeamId, User[]> = {
-  "1": [],
-  "2": [],
-  "3": [],
-};
-
-const combineTeamResult = () => {
-  return [...teamResult["1"], ...teamResult["2"], ...teamResult["3"]].sort((a, b) => {
-    return Number(a.volumeUSD) > Number(b.volumeUSD) ? -1 : 1;
-  });
-};
-
-const refreshTradingCompLeaderboard = async (team: TeamId = "1", skip = 0) => {
-  console.log("TradingCompLeaderboard refresh begin team:", team, "skip:", skip);
-
+const getUsersFirstPage = async () => {
   const { users } = await request(
     TRADING_COMPETITION_SUBGRAPH,
     gql`
-      query getUsersQuery($team: String, $skip: Int) {
+      {
+        users(first: 1000, orderBy: volumeUSD, orderDirection: desc) {
+          id
+          volumeUSD
+          team {
+            id
+          }
+        }
+      }
+    `
+  );
+
+  return users;
+};
+
+const getUserNextPages = async (maxVolumeUSD: string) => {
+  const { users } = await request(
+    TRADING_COMPETITION_SUBGRAPH,
+    gql`
+      query getUsersQuery($maxVolumeUSD: String) {
         users(
           orderBy: volumeUSD
           orderDirection: desc
           first: 1000
-          skip: $skip
-          where: { team: $team, volumeUSD_gt: 0 }
+          where: { volumeUSD_gt: 0, volumeUSD_lt: $maxVolumeUSD }
         ) {
           id
           volumeUSD
@@ -48,21 +48,10 @@ const refreshTradingCompLeaderboard = async (team: TeamId = "1", skip = 0) => {
         }
       }
     `,
-    {
-      team,
-      skip,
-    }
+    { maxVolumeUSD }
   );
 
-  console.log("Fetched users count: {}", users.length);
-  if (users.length > 0) {
-    teamResult[team].push(...users);
-    if (skip + 1000 < 6000) {
-      await refreshTradingCompLeaderboard(team, skip + 1000);
-    }
-  }
-
-  console.log("TradingCompLeaderboard refresh end team:", team, "skip:", skip);
+  return users;
 };
 
 const updateLeaderboard = async (users: User[]) => {
@@ -132,19 +121,41 @@ const updateLeaderboard = async (users: User[]) => {
   }
 };
 
+const refreshTradingCompLeaderboard = async () => {
+  console.log("TradingCompLeaderboard refresh start");
+  let users = await getUsersFirstPage();
+  console.log("Fetched users count:", users.length);
+
+  let allFetched = false;
+  while (!allFetched) {
+    const list = await getUserNextPages(users[users.length - 1].volumeUSD);
+    console.log(
+      "Fetched users count:",
+      list.length,
+      "lastPageMaxVolumeUSD",
+      users[users.length - 1].volumeUSD
+    );
+    if (list.length > 0) {
+      users = users.concat(list);
+    } else {
+      allFetched = true;
+    }
+  }
+
+  await updateLeaderboard(users);
+
+  console.log("Fetched users count: {}", users.length);
+  console.log("TradingCompLeaderboard refresh end");
+};
+
 export default async (req: VercelRequest, res: VercelResponse): Promise<VercelResponse | void> => {
   if (req.method === "POST") {
     try {
       const { authorization } = req.headers;
 
-      console.log(process.env.CRON_API_SECRET_KEY);
       if (authorization === `${process.env.CRON_API_SECRET_KEY}`) {
         try {
-          for (const id of teamIds) {
-            await refreshTradingCompLeaderboard(id);
-          }
-          const allUsersWithOrder = combineTeamResult();
-          await updateLeaderboard(allUsersWithOrder);
+          await refreshTradingCompLeaderboard();
           res.status(200).json({ success: true });
         } catch (error) {
           throw new Error("Error refreshing Trading Competition Leaderboard");
