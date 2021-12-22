@@ -110,11 +110,10 @@ const updateLeaderboard = async (users: User[]) => {
               team: key,
               updated_at: new Date(),
             },
-            { strict: false, upsert: true }
+            { strict: false, upsert: false }
           )
           .exec();
       } catch (e) {
-        console.log(e);
         throw e;
       }
     }
