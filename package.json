@@ -20,9 +20,11 @@
     }
   },
   "dependencies": {
+    "@types/json2csv": "^5.0.3",
     "ethers": "^5.4.0",
     "graphql": "^15.5.0",
     "graphql-request": "^3.5.0",
+    "json2csv": "^5.0.6",
     "mongoose": "^5.13.0"
   },
   "devDependencies": {
