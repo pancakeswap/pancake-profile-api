@@ -95,7 +95,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
 
           const isCsv = csv === "true";
           const isOnlyCount = onlyCount === "true";
-          if (parseInt(pageSize as string) > 1000 || isCsv) {
+          if (parseInt(pageSize as string) > 1000 || isCsv || isOnlyCount) {
             pageSize = "1000";
           }
 
