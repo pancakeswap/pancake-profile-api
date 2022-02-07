@@ -88,11 +88,13 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
             totalPointGreater,
             totalPointLess,
             nftAddress,
+            onlyCount,
             page = "1",
           } = req.query;
           let { pageSize = "1000" } = req.query;
 
           const isCsv = csv === "true";
+          const isOnlyCount = onlyCount === "true";
           if (parseInt(pageSize as string) > 1000 || isCsv) {
             pageSize = "1000";
           }
@@ -101,6 +103,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
           let users: User[] = [];
 
           let fetchedPage = 0;
+          let fetchedUsersCount = 0;
           let allFetched = false;
           while (fetchedPage < parseInt(page as string) && !allFetched) {
             {
@@ -114,8 +117,12 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
               );
               lastUserId = fetchedUsers[fetchedUsers.length - 1]?.internalId;
 
-              if (isCsv) {
-                users = users.concat(fetchedUsers);
+              if (isCsv || onlyCount) {
+                if (onlyCount) {
+                  fetchedUsersCount += fetchedUsers.length;
+                } else {
+                  users = users.concat(fetchedUsers);
+                }
                 if (fetchedUsers.length < pageSize || lastUserId === undefined) {
                   allFetched = true;
                 }
@@ -133,6 +140,8 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
             );
             res.setHeader("Content-Type", "text/csv");
             res.status(200).send(getCsv(users));
+          } else if (isOnlyCount) {
+            res.status(200).json({ total: fetchedUsersCount, success: true });
           } else {
             res.status(200).json({ data: users, success: true });
           }
