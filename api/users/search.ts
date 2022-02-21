@@ -16,28 +16,39 @@ type User = {
 const getUsersFirstPage = async (
   pageSize: number,
   team: string,
-  totalPointGreater: string,
-  totalPointLess: string,
+  totalPointGT: string,
+  totalPointLT: string,
+  totalPointGTE: string,
+  totalPointLTE: string,
   nftAddress: string,
-  lastUserId: string
+  lastUserId: string,
+  isActive: string
 ) => {
   const teamQuery = (team && " team: $team ") || "";
-  const totalPointsGTQuery = (totalPointGreater && " totalPoints_gt: $totalPointGreater ") || "";
-  const totalPointsLTQuery = (totalPointLess && " totalPoints_lt: $totalPointLess ") || "";
+  const totalPointsGTQuery = (totalPointGT && " totalPoints_gt: $totalPointGT ") || "";
+  const totalPointsLTQuery = (totalPointLT && " totalPoints_lt: $totalPointLT ") || "";
+  const totalPointsGTEQuery = (totalPointGTE && " totalPoints_gte: $totalPointGTE ") || "";
+  const totalPointsLTEQuery = (totalPointLTE && " totalPoints_lte: $totalPointLTE ") || "";
   const nftAddressQuery = (nftAddress && " nftAddress: $nftAddress ") || "";
   const lastUserIdQuery = (lastUserId && " internalId_gt: $lastUserId ") || "";
+  const isActiveQuery = (isActive && " isActive: $isActiveBool ") || "";
+  const isActiveBool = isActive.toLowerCase() === "true";
 
   const { users } = await request(
     PROFILE_SUBGRAPH,
     gql`
-        query getUsersQuery($pageSize: Int, $team: String, $totalPointGreater: String, $totalPointLess: String, $nftAddress: String, $lastUserId: String) {
+        query getUsersQuery($pageSize: Int, $team: String, $totalPointGT: String, $totalPointLT: String, 
+            $totalPointGTE: String, $totalPointLTE: String, $nftAddress: String, $lastUserId: String, $isActiveBool: Boolean) {
           users(orderBy: internalId, orderDirection: asc, first: $pageSize, where: ${
             "{" +
             teamQuery +
             totalPointsGTQuery +
             totalPointsLTQuery +
+            totalPointsGTEQuery +
+            totalPointsLTEQuery +
             nftAddressQuery +
             lastUserIdQuery +
+            isActiveQuery +
             "}"
           }) {
             id
@@ -52,7 +63,17 @@ const getUsersFirstPage = async (
           }
         }
       `,
-    { pageSize, team, totalPointGreater, totalPointLess, nftAddress, lastUserId }
+    {
+      pageSize,
+      team,
+      totalPointGT,
+      totalPointLT,
+      totalPointGTE,
+      totalPointLTE,
+      nftAddress,
+      lastUserId,
+      isActiveBool,
+    }
   );
 
   return users;
@@ -87,9 +108,12 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
             team,
             totalPointGreater,
             totalPointLess,
+            totalPointEqualGreater,
+            totalPointEqualLess,
             nftAddress,
             onlyCount,
             page = "1",
+            isActive,
           } = req.query;
           let { pageSize = "1000" } = req.query;
 
@@ -112,8 +136,11 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
                 team as string,
                 totalPointGreater as string,
                 totalPointLess as string,
+                totalPointEqualGreater as string,
+                totalPointEqualLess as string,
                 nftAddress as string,
-                lastUserId
+                lastUserId,
+                isActive as string
               );
               lastUserId = fetchedUsers[fetchedUsers.length - 1]?.internalId;
 
