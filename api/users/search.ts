@@ -32,7 +32,7 @@ const getUsersFirstPage = async (
   const nftAddressQuery = (nftAddress && " nftAddress: $nftAddress ") || "";
   const lastUserIdQuery = (lastUserId && " internalId_gt: $lastUserId ") || "";
   const isActiveQuery = (isActive && " isActive: $isActiveBool ") || "";
-  const isActiveBool = isActive.toLowerCase() === "true";
+  const isActiveBool = isActive && isActive.toLowerCase() === "true";
 
   const { users } = await request(
     PROFILE_SUBGRAPH,
