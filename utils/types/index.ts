@@ -7,6 +7,7 @@ export interface User extends Document {
   team: string;
   leaderboard?: Leaderboard;
   leaderboard_fantoken?: Leaderboard;
+  leaderboard_mobox?: Leaderboard;
   created_at: Date;
   updated_at: Date;
 }

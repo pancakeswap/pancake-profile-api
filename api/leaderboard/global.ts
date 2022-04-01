@@ -1,7 +1,7 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { gql, request } from "graphql-request";
 import { getAddress } from "ethers/lib/utils";
-import { TRADING_COMPETITION_SUBGRAPH } from "../../utils";
+import { getTradingCompId, getTradingCompSubgraph } from "../../utils";
 
 interface User {
   id: string;
@@ -16,11 +16,14 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
     return res.status(204).end();
   }
 
+  let { competitionId } = req.query;
+  competitionId = getTradingCompId(competitionId);
+
   const { competition, users } = await request(
-    TRADING_COMPETITION_SUBGRAPH,
+    getTradingCompSubgraph(competitionId),
     gql`
       {
-        competition(id: "2") {
+        competition(id: ${competitionId}) {
           id
           userCount
           volumeUSD
@@ -44,8 +47,8 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
   }));
 
   return res.status(200).json({
-    total: parseInt(competition.userCount),
-    volume: parseFloat(competition.volumeUSD),
+    total: parseInt(competition?.userCount || "0"),
+    volume: parseFloat(competition?.volumeUSD || "0"),
     data,
   });
 };

@@ -18,7 +18,15 @@
       "destination": "/api/users/valid"
     },
     {
-      "source": "/api/leaderboard/team/:teamId",
+      "source": "/api/cron/refreshLeaderboard/:competitionId",
+      "destination": "/api/cron/refreshLeaderboard"
+    },
+    {
+      "source": "/api/leaderboard/:competitionId/global",
+      "destination": "/api/leaderboard/global"
+    },
+    {
+      "source": "/api/leaderboard/:competitionId/team/:teamId",
       "destination": "/api/leaderboard/team"
     }
   ],
