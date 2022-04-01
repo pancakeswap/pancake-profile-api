@@ -1,7 +1,7 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { gql, request } from "graphql-request";
 import { getModel } from "../../utils/mongo";
-import { TRADING_COMPETITION_SUBGRAPH } from "../../utils";
+import { getTradingCompId, getTradingCompSubgraph } from "../../utils";
 
 type User = {
   id: string;
@@ -10,9 +10,9 @@ type User = {
   globalRank?: number;
 };
 
-const getUsersFirstPage = async () => {
+const getUsersFirstPage = async (tradingCompSubgraph: string) => {
   const { users } = await request(
-    TRADING_COMPETITION_SUBGRAPH,
+    tradingCompSubgraph,
     gql`
       {
         users(first: 1000, orderBy: volumeUSD, orderDirection: desc) {
@@ -29,9 +29,9 @@ const getUsersFirstPage = async () => {
   return users;
 };
 
-const getUserNextPages = async (maxVolumeUSD: string) => {
+const getUserNextPages = async (tradingCompSubgraph: string, maxVolumeUSD: string) => {
   const { users } = await request(
-    TRADING_COMPETITION_SUBGRAPH,
+    tradingCompSubgraph,
     gql`
       query getUsersQuery($maxVolumeUSD: String) {
         users(
@@ -101,7 +101,7 @@ const updateLeaderboard = async (users: User[]) => {
           .updateOne(
             query,
             {
-              leaderboard_fantoken: {
+              leaderboard_mobox: {
                 global: value[i].globalRank,
                 team: value[i].teamRank,
                 volume: value[i].volumeUSD,
@@ -120,14 +120,14 @@ const updateLeaderboard = async (users: User[]) => {
   }
 };
 
-const refreshTradingCompLeaderboard = async () => {
+const refreshTradingCompLeaderboard = async (tradingCompSubgraph: string) => {
   console.log("TradingCompLeaderboard refresh start");
-  let users = await getUsersFirstPage();
+  let users = await getUsersFirstPage(tradingCompSubgraph);
   console.log("Fetched users count:", users.length);
 
   let allFetched = false;
   while (!allFetched) {
-    const list = await getUserNextPages(users[users.length - 1].volumeUSD);
+    const list = await getUserNextPages(tradingCompSubgraph, users[users.length - 1].volumeUSD);
     console.log(
       "Fetched users count:",
       list.length,
@@ -154,7 +154,10 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
 
       if (authorization === `${process.env.CRON_API_SECRET_KEY}`) {
         try {
-          await refreshTradingCompLeaderboard();
+          const { competitionId } = req.query;
+          const tradingCompSubgraph = getTradingCompSubgraph(getTradingCompId(competitionId));
+
+          await refreshTradingCompLeaderboard(tradingCompSubgraph);
           res.status(200).json({ success: true });
         } catch (error) {
           throw new Error("Error refreshing Trading Competition Leaderboard");

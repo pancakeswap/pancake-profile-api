@@ -1,14 +1,31 @@
 import blacklist from "./blacklist.json";
 import { getModel } from "./mongo";
 
-export const TRADING_COMPETITION_V1_SUBGRAPH =
-  "https://api.thegraph.com/subgraphs/name/pancakeswap/trading-competition-v1";
-export const TRADING_COMPETITION_V2_SUBGRAPH =
-  "https://api.thegraph.com/subgraphs/name/pancakeswap/trading-competition-v2";
-
-export const TRADING_COMPETITION_SUBGRAPH = TRADING_COMPETITION_V2_SUBGRAPH;
-
 export const PROFILE_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/pancakeswap/profile";
+
+const TRADING_COMP_URL_PREFIX =
+  "https://api.thegraph.com/subgraphs/name/pancakeswap/trading-competition-";
+
+export const getTradingCompSubgraph = (id: string): string => {
+  switch (id) {
+    case "1":
+      return TRADING_COMP_URL_PREFIX + "v1";
+    case "2":
+      return TRADING_COMP_URL_PREFIX + "v2";
+    case "3":
+      return TRADING_COMP_URL_PREFIX + "v3";
+    default:
+      return TRADING_COMP_URL_PREFIX + "v2";
+  }
+};
+
+export const getTradingCompId = (competitionID: string | string[]): string => {
+  competitionID = competitionID as string;
+  if (["1", "2", "3"].includes(competitionID)) {
+    return competitionID;
+  }
+  return "2";
+};
 
 /**
  * Check for the validity of a username based on rules (see documentation).
