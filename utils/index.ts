@@ -27,6 +27,19 @@ export const getTradingCompId = (competitionID: string | string[]): string => {
   return "2";
 };
 
+export const getLeaderboardKey = (competitionID: string): string => {
+  switch (competitionID) {
+    case "1":
+      return "leaderboard";
+    case "2":
+      return "leaderboard_fantoken";
+    case "3":
+      return "leaderboard_mobox";
+    default:
+      return "leaderboard_fantoken";
+  }
+};
+
 /**
  * Check for the validity of a username based on rules (see documentation).
  *
