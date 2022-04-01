@@ -28,6 +28,10 @@
     {
       "source": "/api/leaderboard/:competitionId/team/:teamId",
       "destination": "/api/leaderboard/team"
+    },
+    {
+      "source": "/api/leaderboard/team/:teamId",
+      "destination": "/api/leaderboard/team"
     }
   ],
   "headers": [
