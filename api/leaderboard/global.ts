@@ -23,7 +23,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
     getTradingCompSubgraph(competitionId),
     gql`
       {
-        competition(id: ${competitionId}) {
+        competition(id: ${competitionId === "test" ? "3" : competitionId}) {
           id
           userCount
           volumeUSD
