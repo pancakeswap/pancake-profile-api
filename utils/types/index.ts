@@ -8,6 +8,7 @@ export interface User extends Document {
   leaderboard?: Leaderboard;
   leaderboard_fantoken?: Leaderboard;
   leaderboard_mobox?: Leaderboard;
+  leaderboard_test?: Leaderboard;
   created_at: Date;
   updated_at: Date;
 }
