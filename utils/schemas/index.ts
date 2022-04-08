@@ -58,6 +58,10 @@ export const userSchema: Schema = new Schema(
       type: leaderboardSchema,
       required: false,
     },
+    leaderboard_test: {
+      type: leaderboardSchema,
+      required: false,
+    },
     created_at: {
       type: Date,
       default: Date.now,

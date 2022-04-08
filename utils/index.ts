@@ -14,6 +14,8 @@ export const getTradingCompSubgraph = (id: string): string => {
       return TRADING_COMP_URL_PREFIX + "v2";
     case "3":
       return TRADING_COMP_URL_PREFIX + "v3";
+    case "test":
+      return process.env.TEST_TRADING_COMP_URL || TRADING_COMP_URL_PREFIX + "v2";
     default:
       return TRADING_COMP_URL_PREFIX + "v2";
   }
@@ -21,7 +23,7 @@ export const getTradingCompSubgraph = (id: string): string => {
 
 export const getTradingCompId = (competitionID: string | string[]): string => {
   competitionID = competitionID as string;
-  if (["1", "2", "3"].includes(competitionID)) {
+  if (["test", "1", "2", "3"].includes(competitionID)) {
     return competitionID;
   }
   return "2";
@@ -35,6 +37,8 @@ export const getLeaderboardKey = (competitionID: string): string => {
       return "leaderboard_fantoken";
     case "3":
       return "leaderboard_mobox";
+    case "test":
+      return "leaderboard_test";
     default:
       return "leaderboard_fantoken";
   }
