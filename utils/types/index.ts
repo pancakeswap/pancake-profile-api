@@ -18,4 +18,5 @@ export interface Leaderboard {
   team: number;
   volume: number;
   next_rank: number;
+  moboxVolumeRank?: number;
 }

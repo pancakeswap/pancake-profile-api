@@ -38,6 +38,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
         team: user.leaderboard_mobox?.team ?? "???",
         volume: user.leaderboard_mobox?.volume ?? 0,
         next_rank: user.leaderboard_mobox?.next_rank ?? "???",
+        moboxVolumeRank: user.leaderboard_mobox?.moboxVolumeRank ?? "???",
       },
       leaderboard_test: {
         global: user.leaderboard_test?.global ?? "???",
