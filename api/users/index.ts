@@ -45,6 +45,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
         team: user.leaderboard_test?.team ?? "???",
         volume: user.leaderboard_test?.volume ?? 0,
         next_rank: user.leaderboard_test?.next_rank ?? "???",
+        moboxVolumeRank: user.leaderboard_mobox?.moboxVolumeRank ?? "???",
       },
       created_at: user.created_at,
       updated_at: user.updated_at,
