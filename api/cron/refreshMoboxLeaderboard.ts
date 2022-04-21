@@ -58,6 +58,7 @@ const updateLeaderboard = async (competitionId: string, users: User[]) => {
           query,
           {
             ["leaderboard_mobox.moboxVolumeRank"]: i,
+            ["leaderboard_mobox.moboxVolume"]: Number(users[i - 1].moboxVolumeUSD),
             updated_at: new Date(),
           },
           { strict: false, upsert: false }
