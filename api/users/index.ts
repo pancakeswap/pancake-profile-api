@@ -39,6 +39,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
         volume: user.leaderboard_mobox?.volume ?? 0,
         next_rank: user.leaderboard_mobox?.next_rank ?? "???",
         moboxVolumeRank: user.leaderboard_mobox?.moboxVolumeRank ?? "???",
+        moboxVolume: user.leaderboard_mobox?.moboxVolume ?? "???",
       },
       leaderboard_test: {
         global: user.leaderboard_test?.global ?? "???",
@@ -46,6 +47,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
         volume: user.leaderboard_test?.volume ?? 0,
         next_rank: user.leaderboard_test?.next_rank ?? "???",
         moboxVolumeRank: user.leaderboard_mobox?.moboxVolumeRank ?? "???",
+        moboxVolume: user.leaderboard_mobox?.moboxVolume ?? "???",
       },
       created_at: user.created_at,
       updated_at: user.updated_at,
