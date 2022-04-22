@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
 
-export const leaderboardSchema: Schema = new Schema({
+const defaultLeaderboardSchema = {
   global: {
     type: Number,
     default: 0,
@@ -16,6 +16,18 @@ export const leaderboardSchema: Schema = new Schema({
   next_rank: {
     type: Number,
     default: 0,
+  },
+};
+
+export const leaderboardSchema: Schema = new Schema(defaultLeaderboardSchema);
+export const moboxLeaderboardSchema: Schema = new Schema({
+  ...defaultLeaderboardSchema,
+  moboxVolume: {
+    type: Number,
+    default: 0,
+  },
+  moboxVolumeRank: {
+    type: Number,
   },
 });
 
@@ -55,7 +67,7 @@ export const userSchema: Schema = new Schema(
       required: false,
     },
     leaderboard_mobox: {
-      type: leaderboardSchema,
+      type: moboxLeaderboardSchema,
       required: false,
     },
     leaderboard_test: {
