@@ -29,6 +29,28 @@ export const getTradingCompId = (competitionID: string | string[]): string => {
   return "2";
 };
 
+export const getRewardGroup = (competitionID: string | string[]): string => {
+  competitionID = competitionID as string;
+  if (["1", "2", "3", "4"].includes(competitionID)) {
+    return competitionID;
+  }
+  return "4";
+};
+
+export const getRewardGroupTitle = (competitionID: string): string | undefined => {
+  competitionID = competitionID as string;
+  switch (competitionID) {
+    case "1":
+      return "1 - Purple";
+    case "2":
+      return "2 - Bronze";
+    case "3":
+      return "3 - Silver";
+    case "4":
+      return "4 - Gold";
+  }
+};
+
 export const getLeaderboardKey = (competitionID: string): string => {
   switch (competitionID) {
     case "1":

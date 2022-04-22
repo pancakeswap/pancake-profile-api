@@ -30,6 +30,10 @@
       "destination": "/api/leaderboard/team"
     },
     {
+      "source": "/api/leaderboard/:competitionId/team/:teamId/group/:rewardGroup",
+      "destination": "/api/leaderboard/team"
+    },
+    {
       "source": "/api/leaderboard/team/:teamId",
       "destination": "/api/leaderboard/team"
     }
