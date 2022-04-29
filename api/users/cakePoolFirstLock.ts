@@ -27,7 +27,7 @@ const getUsersFirstPage = async (subgraph: string) => {
           orderBy: totalLocked
           orderDirection: desc
           first: 1000
-          where: { duration_gte: 31536000 }
+          where: { duration_gte: 31449600 }
         ) {
           id
           totalLocked
@@ -49,7 +49,7 @@ const getUserNextPages = async (subgraph: string, maxTotalLocked: string) => {
           orderBy: totalLocked
           orderDirection: desc
           first: 1000
-          where: { duration_gte: 31536000, totalLocked_lte: $maxTotalLocked }
+          where: { duration_gte: 31449600, totalLocked_lte: $maxTotalLocked }
         ) {
           id
           totalLocked
