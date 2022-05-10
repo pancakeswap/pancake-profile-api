@@ -1,13 +1,13 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { gql, request } from "graphql-request";
 import { getModel } from "../../utils/mongo";
-import { getTradingCompSubgraph } from "../../utils";
+import { getLeaderboardKey, getTradingCompId, getTradingCompSubgraph } from "../../utils/naming";
 
 type User = {
   id: string;
   team: { id: string };
-  moboxVolumeUSD: string;
-  moboxVolumeRank?: number;
+  darVolumeUSD: string;
+  darVolumeRank?: number;
 };
 
 const getUsersFirstPage = async (tradingCompSubgraph: string) => {
@@ -15,9 +15,9 @@ const getUsersFirstPage = async (tradingCompSubgraph: string) => {
     tradingCompSubgraph,
     gql`
       {
-        users(first: 1000, orderBy: moboxVolumeUSD, orderDirection: desc) {
+        users(first: 1000, orderBy: darVolumeUSD, orderDirection: desc) {
           id
-          moboxVolumeUSD
+          darVolumeUSD
         }
       }
     `
@@ -32,13 +32,13 @@ const getUserNextPages = async (tradingCompSubgraph: string, maxVolumeUSD: strin
     gql`
       query getUsersQuery($maxVolumeUSD: String) {
         users(
-          orderBy: moboxVolumeUSD
+          orderBy: darVolumeUSD
           orderDirection: desc
           first: 1000
-          where: { moboxVolumeUSD_gt: 0, moboxVolumeUSD_lt: $maxVolumeUSD }
+          where: { darVolumeUSD_gt: 0, darVolumeUSD_lt: $maxVolumeUSD }
         ) {
           id
-          moboxVolumeUSD
+          darVolumeUSD
         }
       }
     `,
@@ -57,8 +57,8 @@ const updateLeaderboard = async (competitionId: string, users: User[]) => {
         .updateOne(
           query,
           {
-            ["leaderboard_mobox.moboxVolumeRank"]: i,
-            ["leaderboard_mobox.moboxVolume"]: Number(users[i - 1].moboxVolumeUSD),
+            [`${getLeaderboardKey(competitionId)}.darVolumeRank`]: i,
+            [`${getLeaderboardKey(competitionId)}.darVolume`]: Number(users[i - 1].darVolumeUSD),
             updated_at: new Date(),
           },
           { strict: false, upsert: false }
@@ -70,9 +70,12 @@ const updateLeaderboard = async (competitionId: string, users: User[]) => {
   }
 };
 
-const refreshMoboxLeaderboard = async () => {
-  console.log("Mobox TradingCompLeaderboard refresh start");
-  const tradingCompSubgraph = getTradingCompSubgraph("3");
+const refreshSpecificTokenLeaderboard = async (competitionId: string) => {
+  if (["test", "1", "2"].includes(competitionId)) {
+    return;
+  }
+  console.log("Specific token TradingCompLeaderboard refresh start");
+  const tradingCompSubgraph = getTradingCompSubgraph(competitionId);
   let users = await getUsersFirstPage(tradingCompSubgraph);
   console.log("Fetched users count:", users.length);
 
@@ -81,13 +84,13 @@ const refreshMoboxLeaderboard = async () => {
     while (!allFetched) {
       const list = await getUserNextPages(
         tradingCompSubgraph,
-        users[users.length - 1].moboxVolumeUSD
+        users[users.length - 1].darVolumeUSD
       );
       console.log(
         "Fetched users count:",
         list.length,
         "lastPageMaxVolumeUSD",
-        users[users.length - 1].moboxVolumeUSD
+        users[users.length - 1].darVolumeUSD
       );
       if (list.length > 0) {
         users = users.concat(list);
@@ -96,11 +99,11 @@ const refreshMoboxLeaderboard = async () => {
       }
     }
 
-    await updateLeaderboard("3", users);
+    await updateLeaderboard("4", users);
   }
 
   console.log("Fetched users count: {}", users.length);
-  console.log("Mobox TradingCompLeaderboard refresh end");
+  console.log("Specific Token TradingCompLeaderboard refresh end");
 };
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<VercelResponse | void> => {
@@ -110,10 +113,13 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
 
       if (authorization === `${process.env.CRON_API_SECRET_KEY}`) {
         try {
-          await refreshMoboxLeaderboard();
+          let { competitionId } = req.query;
+          competitionId = getTradingCompId(competitionId);
+
+          await refreshSpecificTokenLeaderboard(competitionId);
           res.status(200).json({ success: true });
         } catch (error) {
-          throw new Error("Error refreshing Mobox Trading Competition Leaderboard");
+          throw new Error("Error refreshing Specific Token Trading Competition Leaderboard");
         }
       } else {
         res.status(401).json({ success: false });

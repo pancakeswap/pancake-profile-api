@@ -6,7 +6,7 @@ import {
   getRewardGroupTitle,
   getTradingCompId,
   getTradingCompSubgraph,
-} from "../../utils";
+} from "../../utils/naming";
 
 interface User {
   id: string;

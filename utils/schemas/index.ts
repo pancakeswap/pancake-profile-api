@@ -30,6 +30,16 @@ export const moboxLeaderboardSchema: Schema = new Schema({
     type: Number,
   },
 });
+export const darLeaderboardSchema: Schema = new Schema({
+  ...defaultLeaderboardSchema,
+  darVolume: {
+    type: Number,
+    default: 0,
+  },
+  darVolumeRank: {
+    type: Number,
+  },
+});
 
 export const userSchema: Schema = new Schema(
   {
@@ -68,6 +78,10 @@ export const userSchema: Schema = new Schema(
     },
     leaderboard_mobox: {
       type: moboxLeaderboardSchema,
+      required: false,
+    },
+    leaderboard_dar: {
+      type: darLeaderboardSchema,
       required: false,
     },
     leaderboard_test: {
