@@ -1,7 +1,7 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { gql, request } from "graphql-request";
 import { getAddress } from "ethers/lib/utils";
-import { getTradingCompId, getTradingCompSubgraph } from "../../utils";
+import { getTradingCompId, getTradingCompSubgraph } from "../../utils/naming";
 
 interface User {
   id: string;

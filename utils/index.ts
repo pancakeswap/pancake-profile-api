@@ -3,69 +3,6 @@ import { getModel } from "./mongo";
 
 export const PROFILE_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/pancakeswap/profile";
 
-const TRADING_COMP_URL_PREFIX =
-  "https://api.thegraph.com/subgraphs/name/pancakeswap/trading-competition-";
-
-export const getTradingCompSubgraph = (id: string): string => {
-  switch (id) {
-    case "1":
-      return TRADING_COMP_URL_PREFIX + "v1";
-    case "2":
-      return TRADING_COMP_URL_PREFIX + "v2";
-    case "3":
-      return TRADING_COMP_URL_PREFIX + "v3";
-    case "test":
-      return process.env.TEST_TRADING_COMP_URL || TRADING_COMP_URL_PREFIX + "v2";
-    default:
-      return TRADING_COMP_URL_PREFIX + "v2";
-  }
-};
-
-export const getTradingCompId = (competitionID: string | string[]): string => {
-  competitionID = competitionID as string;
-  if (["test", "1", "2", "3"].includes(competitionID)) {
-    return competitionID;
-  }
-  return "2";
-};
-
-export const getRewardGroup = (competitionID: string | string[]): string => {
-  competitionID = competitionID as string;
-  if (["1", "2", "3", "4"].includes(competitionID)) {
-    return competitionID;
-  }
-  return "4";
-};
-
-export const getRewardGroupTitle = (competitionID: string): string | undefined => {
-  competitionID = competitionID as string;
-  switch (competitionID) {
-    case "1":
-      return "1 - Purple";
-    case "2":
-      return "2 - Bronze";
-    case "3":
-      return "3 - Silver";
-    case "4":
-      return "4 - Gold";
-  }
-};
-
-export const getLeaderboardKey = (competitionID: string): string => {
-  switch (competitionID) {
-    case "1":
-      return "leaderboard";
-    case "2":
-      return "leaderboard_fantoken";
-    case "3":
-      return "leaderboard_mobox";
-    case "test":
-      return "leaderboard_test";
-    default:
-      return "leaderboard_fantoken";
-  }
-};
-
 /**
  * Check for the validity of a username based on rules (see documentation).
  *

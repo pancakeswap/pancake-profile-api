@@ -7,8 +7,9 @@ export interface User extends Document {
   team: string;
   leaderboard?: Leaderboard;
   leaderboard_fantoken?: Leaderboard;
-  leaderboard_mobox?: Leaderboard;
-  leaderboard_test?: Leaderboard;
+  leaderboard_mobox?: LeaderboardMobox;
+  leaderboard_dar?: LeaderboardDar;
+  leaderboard_test?: LeaderboardMobox;
   created_at: Date;
   updated_at: Date;
 }
@@ -18,6 +19,14 @@ export interface Leaderboard {
   team: number;
   volume: number;
   next_rank: number;
+}
+
+export interface LeaderboardMobox extends Leaderboard {
   moboxVolumeRank?: number;
   moboxVolume?: number;
+}
+
+export interface LeaderboardDar extends Leaderboard {
+  darVolumeRank?: number;
+  darVolume?: number;
 }

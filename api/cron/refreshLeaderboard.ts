@@ -1,7 +1,7 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { gql, request } from "graphql-request";
 import { getModel } from "../../utils/mongo";
-import { getLeaderboardKey, getTradingCompId, getTradingCompSubgraph } from "../../utils";
+import { getLeaderboardKey, getTradingCompId, getTradingCompSubgraph } from "../../utils/naming";
 
 type User = {
   id: string;
