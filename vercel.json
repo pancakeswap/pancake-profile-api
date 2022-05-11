@@ -22,6 +22,10 @@
       "destination": "/api/cron/refreshLeaderboard"
     },
     {
+      "source": "/api/cron/refreshSpecificTokenLeaderboard/:competitionId",
+      "destination": "/api/cron/refreshLeaderboard"
+    },
+    {
       "source": "/api/leaderboard/:competitionId/global",
       "destination": "/api/leaderboard/global"
     },

@@ -64,16 +64,3 @@ export const getLeaderboardKey = (competitionID: string): string => {
       return "leaderboard_fantoken";
   }
 };
-
-export const getSpecificTokenKeys = (
-  competitionID: string
-): { volumeUSD: string; volumeRank: string; volume: string } => {
-  switch (competitionID) {
-    case "3":
-      return { volumeUSD: "moboxVolumeUSD", volumeRank: "moboxVolumeRank", volume: "moboxVolume" };
-    case "4":
-      return { volumeUSD: "darVolumeUSD", volumeRank: "moboxVolumeRank", volume: "darVolume" };
-    default:
-      return { volumeUSD: "moboxVolumeUSD", volumeRank: "moboxVolumeRank", volume: "darVolume" };
-  }
-};
