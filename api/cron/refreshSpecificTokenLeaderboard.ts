@@ -99,7 +99,7 @@ const refreshSpecificTokenLeaderboard = async (competitionId: string) => {
       }
     }
 
-    await updateLeaderboard("4", users);
+    await updateLeaderboard(competitionId, users);
   }
 
   console.log("Fetched users count: {}", users.length);
