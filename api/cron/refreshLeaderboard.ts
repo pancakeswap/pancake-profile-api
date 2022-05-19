@@ -15,7 +15,7 @@ const getUsersFirstPage = async (tradingCompSubgraph: string) => {
     tradingCompSubgraph,
     gql`
       {
-        users(first: 1000, orderBy: volumeUSD, orderDirection: desc) {
+        users(first: 1000, orderBy: volumeUSD, orderDirection: desc, where: { volumeUSD_gt: 0 }) {
           id
           volumeUSD
           team {
