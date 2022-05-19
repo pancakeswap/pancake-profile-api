@@ -23,7 +23,7 @@
     },
     {
       "source": "/api/cron/refreshSpecificTokenLeaderboard/:competitionId",
-      "destination": "/api/cron/refreshLeaderboard"
+      "destination": "/api/cron/refreshSpecificTokenLeaderboard"
     },
     {
       "source": "/api/leaderboard/:competitionId/global",
