@@ -101,12 +101,10 @@ const updateLeaderboard = async (competitionId: string, users: User[]) => {
           .updateOne(
             query,
             {
-              [getLeaderboardKey(competitionId)]: {
-                global: value[i].globalRank,
-                team: value[i].teamRank,
-                volume: value[i].volumeUSD,
-                next_rank: value[i].next_rank,
-              },
+              [`${getLeaderboardKey(competitionId)}.global`]: value[i].globalRank,
+              [`${getLeaderboardKey(competitionId)}.team`]: value[i].teamRank,
+              [`${getLeaderboardKey(competitionId)}.volume`]: value[i].volumeUSD,
+              [`${getLeaderboardKey(competitionId)}.next_rank`]: value[i].next_rank,
               team: key,
               updated_at: new Date(),
             },
