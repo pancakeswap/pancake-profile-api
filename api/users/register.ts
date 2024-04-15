@@ -1,7 +1,8 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { verifyMessage } from "ethers/lib/utils";
 import { isValid } from "../../utils";
 import { getModel } from "../../utils/mongo";
+import { verifyMessage } from "../../utils/verifyMessage";
+import { getAddress, isHex } from "viem";
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<VercelResponse | void> => {
   if (req.method?.toUpperCase() === "OPTIONS") {
@@ -15,8 +16,14 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
     return res.status(400).json({ error: { message } });
   }
 
-  const signedAddress = verifyMessage(username, signature);
-  if (address.toLowerCase() !== signedAddress?.toLowerCase()) {
+  const sig = signature.startWith("0x") ? signature : `0x${signature}`;
+
+  if (!isHex(sig)) {
+    return res.status(400).json({ error: { message: "Invalid signature." } });
+  }
+
+  const isValidMessage = await verifyMessage(username, sig, getAddress(address));
+  if (!isValidMessage) {
     return res.status(400).json({ error: { message: "Invalid signature." } });
   }
 
