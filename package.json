@@ -10,7 +10,7 @@
     "format:check": "prettier --check '*/**/*.{js,ts}'",
     "format:write": "prettier --write '*/**/*.{js,ts}'",
     "lint": "eslint '*/**/*.{js,ts}'",
-    "test": "jest",
+    "test": "vitest --run --globals",
     "test:coverage": "jest --coverage"
   },
   "husky": {
@@ -44,6 +44,7 @@
     "prettier": "^2.3.2",
     "ts-jest": "^27.0.3",
     "ts-node": "^10.0.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
   }
 }
