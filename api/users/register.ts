@@ -16,7 +16,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<VercelRe
     return res.status(400).json({ error: { message } });
   }
 
-  const sig = signature.startWith("0x") ? signature : `0x${signature}`;
+  const sig = String(signature).startsWith("0x") ? signature : `0x${signature}`;
 
   if (!isHex(sig)) {
     return res.status(400).json({ error: { message: "Invalid signature." } });
