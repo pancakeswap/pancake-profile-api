@@ -1,7 +1,7 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { gql, request } from "graphql-request";
 import { Parser } from "json2csv";
-import { PROFILE_SUBGRAPH } from "../../utils";
+import { getProfileSubgraph } from "../../utils";
 
 type User = {
   id: string;
@@ -35,7 +35,7 @@ const getUsersFirstPage = async (
   const isActiveBool = isActive && isActive.toLowerCase() === "true";
 
   const { users } = await request(
-    PROFILE_SUBGRAPH,
+    getProfileSubgraph(),
     gql`
         query getUsersQuery($pageSize: Int, $team: String, $totalPointGT: String, $totalPointLT: String, 
             $totalPointGTE: String, $totalPointLTE: String, $nftAddress: String, $lastUserId: String, $isActiveBool: Boolean) {

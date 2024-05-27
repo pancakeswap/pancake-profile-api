@@ -1,8 +1,13 @@
 import blacklist from "./blacklist.json";
 import { getModel } from "./mongo";
 
-export const PROFILE_SUBGRAPH =
-  process.env.PROFILE_SUBGRAPH_URL || "https://api.thegraph.com/subgraphs/name/pancakeswap/profile";
+export const getProfileSubgraph = (): string => {
+  const profileSubgraphUrl = process.env.PROFILE_SUBGRAPH_URL;
+  if (profileSubgraphUrl) {
+    return profileSubgraphUrl;
+  }
+  throw Error(`Profile subgraph URL is not set ${profileSubgraphUrl}`);
+};
 
 /**
  * Check for the validity of a username based on rules (see documentation).
