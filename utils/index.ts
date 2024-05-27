@@ -1,7 +1,8 @@
 import blacklist from "./blacklist.json";
 import { getModel } from "./mongo";
 
-export const PROFILE_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/pancakeswap/profile";
+export const PROFILE_SUBGRAPH =
+  process.env.PROFILE_SUBGRAPH_URL || "https://api.thegraph.com/subgraphs/name/pancakeswap/profile";
 
 /**
  * Check for the validity of a username based on rules (see documentation).
